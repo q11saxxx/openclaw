@@ -1,0 +1,5 @@
+rules:
+  - id: sensitive-path-access
+    title: 检测敏感路径访问
+    pattern: "/etc/passwd"
+    level: high
