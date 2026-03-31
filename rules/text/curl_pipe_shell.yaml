@@ -1,7 +1,0 @@
-# 本文件说明：检测文档或脚本中下载后直接通过管道执行的高危模式。
-id: OCS001
-name: curl_pipe_shell
-severity: high
-category: execution
-pattern: '(curl|wget)\s+.*\|\s*(sh|bash)'
-message: 检测到下载后直接执行命令，存在高危供应链风险。

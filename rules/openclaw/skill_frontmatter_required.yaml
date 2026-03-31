@@ -1,6 +1,0 @@
-# 本文件说明：OpenClaw 专项规则，检查 SKILL.md 与 frontmatter 关键字段是否缺失。
-id: OCS101
-name: skill_frontmatter_required
-severity: medium
-category: openclaw-metadata
-message: SKILL.md 或核心 frontmatter 字段缺失，影响插件可信性与可审计性。
