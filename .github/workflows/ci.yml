@@ -1,0 +1,9 @@
+# 本文件说明：CI 占位配置，后续自动跑后端测试和前端构建检查。
+name: ci
+on: [push, pull_request]
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "TODO: add CI"

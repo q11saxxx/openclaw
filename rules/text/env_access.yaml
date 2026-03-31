@@ -1,0 +1,7 @@
+# 本文件说明：检测环境变量读取行为，识别可能的密钥访问。
+id: OCS002
+name: env_access
+severity: medium
+category: secrets
+pattern: '(os\.environ|getenv\(|process\.env)'
+message: 检测到环境变量访问，请检查是否涉及敏感凭证。
