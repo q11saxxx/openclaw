@@ -12,10 +12,38 @@ class SemanticAuditAgent(BaseAgent):
     """
     name = "semantic_audit"
 
-    def __init__(self) -> None:
+  def __init__(self) -> None:
+        super().__init__() # 建议加上这行，初始化父类
         self.detector = PromptInjectionDetector()
         self.llm = LLMService()
+        print(f"[{self.name}] Agent 初始化成功，已加载探测器和LLM服务")
 
     def run(self, context: AuditContext) -> None:
-        context.add_finding(self.detector.detect(context.skill_path))
-        context.add_finding(self.llm.semantic_review(context.skill_path))
+        skill_path = context.skill_path
+        print(f"[{self.name}] 开始分析路径: {skill_path}")
+
+        # 1️⃣ 规则检测（第一道防线）
+        rule_result = self.detector.detect(skill_path)
+
+        if rule_result:
+            print(f"[{self.name}] ⚡ 静态规则命中！正在启动强推理模型复核...")
+            context.add_finding(rule_result)
+
+            # 👉 有规则命中 → 直接走强模型复核
+            llm_result = self.llm.semantic_review(
+                skill_path,
+                force_strong=True
+            )
+        else:
+            print(f"[{self.name}] 🛡️ 静态规则未命中。启动轻量模型初筛...")
+            # 👉 无规则命中 → 走“轻量模型初筛”
+            llm_result = self.llm.semantic_review(
+                skill_path,
+                force_strong=False
+            )
+
+        if llm_result:
+            print(f"[{self.name}] 🤖 LLM 审计完成，结果等级: {llm_result.get('risk_level')}")
+            context.add_finding(llm_result)
+        else:
+            print(f"[{self.name}] ℹ️ LLM 未返回有效审计结果")
