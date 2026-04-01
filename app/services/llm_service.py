@@ -1,9 +1,4 @@
-"""LLM 调用封装。
 
-规则描述：
-- 所有模型调用必须从本服务进入，禁止在 agent 内直接散落调用。
-- 必须保留模型输入摘要、输出摘要和失败回退逻辑。
-"""
 import os
 import json
 from openai import OpenAI
@@ -12,6 +7,13 @@ from app.analyzers.prompt_injection_detector import load_skill_text
 
 class LLMService:
 
+    """LLM 调用封装。
+
+规则描述：
+- 所有模型调用必须从本服务进入，禁止在 agent 内直接散落调用。
+- 必须保留模型输入摘要、输出摘要和失败回退逻辑。
+"""
+    
     def __init__(self):
         self.client = OpenAI(
             api_key=os.getenv("DEEPSEEK_API_KEY"),
