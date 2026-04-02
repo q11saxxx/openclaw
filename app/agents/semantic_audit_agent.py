@@ -18,7 +18,7 @@ class SemanticAuditAgent(BaseAgent):
         self.llm = LLMService()
         print(f"[{self.name}] Agent 初始化成功，已加载探测器和LLM服务")
 
-    def run(self, context: AuditContext) -> None:
+  def run(self, context: AuditContext) -> None:
         skill_path = context.skill_path
         print(f"[{self.name}] 开始分析路径: {skill_path}")
 
@@ -27,6 +27,7 @@ class SemanticAuditAgent(BaseAgent):
 
         if rule_result:
             print(f"[{self.name}] ⚡ 静态规则命中！正在启动强推理模型复核...")
+            # 静态规则命中通常都是 High，所以必须记录为风险项
             context.add_finding(rule_result)
 
             # 👉 有规则命中 → 直接走强模型复核
@@ -42,8 +43,19 @@ class SemanticAuditAgent(BaseAgent):
                 force_strong=False
             )
 
+        # 2️⃣ 智能处理 LLM 结果
         if llm_result:
-            print(f"[{self.name}] 🤖 LLM 审计完成，结果等级: {llm_result.get('risk_level')}")
-            context.add_finding(llm_result)
+            risk_level = str(llm_result.get("risk_level", "low")).lower()
+            print(f"[{self.name}] 🤖 LLM 审计完成，模型判定等级: {risk_level}")
+
+            # 💡 关键逻辑修改：
+            # 只有当风险等级是 medium, high 或 critical 时，才作为“风险项”记录
+            if risk_level in ["medium", "high", "critical"]:
+                print(f"[{self.name}] ⚠️ 检测到语义风险，已加入审计报告。")
+                context.add_finding(llm_result)
+            else:
+                # 如果是 low，我们认为该 Skill 是安全的
+                # 不执行 context.add_finding，这样汇总时就不会显示“发现潜在风险项”
+                print(f"[{self.name}] ✅ 审计通过：风险较低，不计入高危发现。")
         else:
             print(f"[{self.name}] ℹ️ LLM 未返回有效审计结果")
