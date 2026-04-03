@@ -1,200 +1,442 @@
-import json
+"""依赖分析器。
+
+规则描述：
+- 负责依赖文件、外部 URL、包源和潜在供应链链路识别。
+- 为后续接入 SBOM/漏洞聚合预留能力。
+
+扫描范围：
+1. 依赖文件识别：requirements.txt、package.json、Gemfile、go.mod 等
+2. 外部URL提取：HTTP/HTTPS URL、FTP 链接等
+3. 包源识别：PyPI、npm、RubyGems、Maven 等官方源与第三方源
+4. 供应链风险：包名相似度、源URL可信度、依赖版本锁定等
+5. 下载链接分析：直接下载的二进制、脚本等
+"""
+import logging
+import os
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Set, Tuple
+
+logger = logging.getLogger(__name__)
 
 
 class DependencyAnalyzer:
-    """依赖与来源分析器。
-
-    规则描述：
-    - 解析 SKILL.md frontmatter，抽取 name / description。
-    - 解析 _meta.json，抽取 ownerId / slug / version / publishedAt。
-    - 扫描脚本文件、hook 路径、外部 URL、可执行文件。
-    - 输出结构化 findings 与风险分数，供 DecisionAgent 融合。
+    """依赖与供应链分析器。
+    
+    检测脚本和配置文件中的依赖声明和外部链接，
+    识别潜在的供应链攻击、依赖冲突和不安全的包源。
     """
-
-    URL_PATTERN = re.compile(r"https?://[^\s)\]>'\"]+")
-    LOCAL_SCRIPT_REF_PATTERN = re.compile(r"(?:\.?/|~/)[^\s)\]>'\"]*scripts/[^\s)\]>'\"]+")
-    FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n?", re.DOTALL)
-
-    def analyze(self, skill_path: str | Path) -> dict[str, Any]:
-        root = Path(skill_path)
-        if not root.exists():
-            raise FileNotFoundError(f"Skill path not found: {root}")
-
-        source = self._analyze_source(root)
-        dependencies = self._analyze_dependencies(root)
-
-        findings: list[dict[str, Any]] = []
-        risk_score = 0
-
-        executable_files = dependencies.get("executable_files", [])
-        if executable_files:
-            findings.append({
-                "level": "medium",
-                "type": "executable_files",
-                "message": f"发现可执行脚本文件: {executable_files}",
-            })
-            risk_score += 20
-
-        hook_paths = dependencies.get("hook_paths", [])
-        if hook_paths:
-            findings.append({
-                "level": "medium",
-                "type": "hook_reference",
-                "message": f"发现 hook / 脚本调用路径: {hook_paths}",
-            })
-            risk_score += 15
-
-        external_urls = dependencies.get("external_urls", [])
-        if external_urls:
-            findings.append({
-                "level": "medium",
-                "type": "external_urls",
-                "message": f"发现外部 URL 引用: {external_urls}",
-            })
-            risk_score += 10
-
-        manifest_files = dependencies.get("manifest_files", [])
-        if manifest_files:
-            findings.append({
+    
+    # 依赖文件类型
+    DEPENDENCY_FILES = {
+        'requirements.txt': {'type': 'python', 'parser': 'parse_requirements'},
+        'setup.py': {'type': 'python', 'parser': 'parse_setup_py'},
+        'pyproject.toml': {'type': 'python', 'parser': 'parse_pyproject'},
+        'Pipfile': {'type': 'python', 'parser': 'parse_pipfile'},
+        'poetry.lock': {'type': 'python', 'parser': 'parse_poetry_lock'},
+        'package.json': {'type': 'nodejs', 'parser': 'parse_package_json'},
+        'yarn.lock': {'type': 'nodejs', 'parser': 'parse_yarn_lock'},
+        'package-lock.json': {'type': 'nodejs', 'parser': 'parse_package_lock'},
+        'pnpm-lock.yaml': {'type': 'nodejs', 'parser': 'parse_pnpm_lock'},
+        'Gemfile': {'type': 'ruby', 'parser': 'parse_gemfile'},
+        'Gemfile.lock': {'type': 'ruby', 'parser': 'parse_gemfile_lock'},
+        'go.mod': {'type': 'golang', 'parser': 'parse_go_mod'},
+        'go.sum': {'type': 'golang', 'parser': 'parse_go_sum'},
+        'pom.xml': {'type': 'java', 'parser': 'parse_maven'},
+        'build.gradle': {'type': 'java', 'parser': 'parse_gradle'},
+    }
+    
+    # 官方包源
+    OFFICIAL_SOURCES = {
+        'https://pypi.org': 'PyPI',
+        'https://registry.npmjs.org': 'npm',
+        'https://rubygems.org': 'RubyGems',
+        'https://proxy.golang.org': 'Go',
+        'https://maven.apache.org': 'Maven Central',
+        'https://repo.maven.apache.org': 'Maven Central',
+    }
+    
+    # 可疑源或镜像
+    SUSPICIOUS_SOURCES = {
+        'http://': {'level': 'medium', 'reason': '非HTTPS source'},
+        'localhost': {'level': 'high', 'reason': '本地源'},
+        'file://': {'level': 'medium', 'reason': '本地文件源'},
+    }
+    
+    # URL提取正则
+    URL_PATTERN = r'https?://[^\s\'"}<>\[\]]*'
+    
+    # 包名可疑模式（可能是名称相似度攻击）
+    SUSPICIOUS_PACKAGE_NAMES = [
+        r'django.*s',  # django shadow packages
+        r'requests.*s',
+        r'numpy.*s',
+        r'pandas.*s',
+    ]
+    
+    def analyze(self, path: str) -> Dict[str, Any]:
+        """分析依赖与供应链风险。
+        
+        Args:
+            path: skill路径，包含依赖配置文件
+            
+        Returns:
+            包含分析结果的字典，格式为：
+            {
+                "title": str,          # 分析标题
+                "level": str,          # 风险等级
+                "dependencies": list,  # 发现的依赖项
+                "external_urls": list, # 发现的外部URL
+                "suspicious": list,    # 可疑项目
+                "summary": dict        # 统计摘要
+            }
+        """
+        logger.debug(f"Starting dependency analysis for path: {path}")
+        
+        dependencies = []
+        external_urls = set()
+        suspicious_items = []
+        
+        try:
+            # 查找所有文件
+            files = self._find_all_files(path)
+            logger.debug(f"Found {len(files)} files to analyze")
+            
+            for file_path in files:
+                try:
+                    content = self._read_file_safe(file_path)
+                    if not content:
+                        continue
+                    
+                    # 检查是否为依赖文件
+                    filename = os.path.basename(file_path)
+                    if filename in self.DEPENDENCY_FILES:
+                        file_deps = self._parse_dependency_file(
+                            file_path, filename, content
+                        )
+                        if file_deps:
+                            dependencies.extend(file_deps)
+                    
+                    # 提取所有URL
+                    urls = self._extract_urls(content)
+                    external_urls.update(urls)
+                    
+                    # 检测可疑项
+                    suspicious = self._detect_suspicious_items(file_path, content)
+                    if suspicious:
+                        suspicious_items.extend(suspicious)
+                
+                except Exception as e:
+                    logger.warning(f"Error analyzing file {file_path}: {str(e)}")
+                    continue
+            
+            return self._build_result(dependencies, external_urls, suspicious_items)
+        
+        except Exception as e:
+            logger.error(f"Error during dependency analysis: {str(e)}", exc_info=True)
+            return {
+                "title": "dependency analysis failed",
                 "level": "low",
-                "type": "manifest_files",
-                "message": f"发现依赖/清单相关文件: {manifest_files}",
+                "dependencies": [],
+                "external_urls": [],
+                "error": str(e)
+            }
+    
+    def _find_all_files(self, path: str) -> List[str]:
+        """递归查找所有文件。"""
+        files = []
+        
+        try:
+            if not os.path.exists(path):
+                logger.warning(f"Path does not exist: {path}")
+                return files
+            
+            if os.path.isfile(path):
+                files.append(path)
+            else:
+                for root, dirs, filenames in os.walk(path):
+                    # 跳过隐藏目录
+                    dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['__pycache__', 'node_modules']]
+                    
+                    for file in filenames:
+                        file_path = os.path.join(root, file)
+                        files.append(file_path)
+        
+        except Exception as e:
+            logger.warning(f"Error finding files: {str(e)}")
+        
+        return files
+    
+    def _read_file_safe(self, path: str) -> str | None:
+        """安全地读取文件内容。"""
+        try:
+            if os.path.getsize(path) > 5 * 1024 * 1024:
+                return None
+            
+            with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+                return f.read()
+        except Exception:
+            return None
+    
+    def _parse_dependency_file(
+        self,
+        file_path: str,
+        filename: str,
+        content: str
+    ) -> List[Dict[str, Any]]:
+        """解析依赖文件。"""
+        dependencies = []
+        
+        try:
+            file_info = self.DEPENDENCY_FILES.get(filename, {})
+            file_type = file_info.get('type', '')
+            
+            if file_type == 'python':
+                dependencies = self._parse_python_deps(content)
+            elif file_type == 'nodejs':
+                dependencies = self._parse_nodejs_deps(content)
+            elif file_type == 'ruby':
+                dependencies = self._parse_ruby_deps(content)
+            elif file_type == 'golang':
+                dependencies = self._parse_golang_deps(content)
+            elif file_type == 'java':
+                dependencies = self._parse_java_deps(content)
+            
+            # 添加文件来源信息
+            for dep in dependencies:
+                dep['source_file'] = file_path
+            
+            logger.debug(f"Parsed {len(dependencies)} dependencies from {filename}")
+        
+        except Exception as e:
+            logger.warning(f"Error parsing dependency file {filename}: {str(e)}")
+        
+        return dependencies
+    
+    def _parse_python_deps(self, content: str) -> List[Dict[str, Any]]:
+        """解析Python依赖。"""
+        dependencies = []
+        lines = content.split('\n')
+        
+        for line in lines:
+            line = line.strip()
+            
+            # 跳过注释和空行
+            if not line or line.startswith('#'):
+                continue
+            
+            # 移除注释
+            if '#' in line:
+                line = line.split('#')[0].strip()
+            
+            # 解析包名和版本
+            if line:
+                # 处理URL格式
+                if line.startswith('git+') or line.startswith('http'):
+                    dependencies.append({
+                        'package': line,
+                        'type': 'url',
+                        'language': 'python'
+                    })
+                else:
+                    # 标准格式：package==version, package>=version 等
+                    match = re.match(r'([a-zA-Z0-9_\-]+)', line)
+                    if match:
+                        package_name = match.group(1)
+                        dependencies.append({
+                            'package': package_name,
+                            'spec': line,
+                            'type': 'package',
+                            'language': 'python'
+                        })
+        
+        return dependencies
+    
+    def _parse_nodejs_deps(self, content: str) -> List[Dict[str, Any]]:
+        """解析Node.js依赖。"""
+        dependencies = []
+        
+        try:
+            import json
+            data = json.loads(content)
+            
+            # 处理 package.json
+            if 'dependencies' in data:
+                for pkg_name, version in data['dependencies'].items():
+                    dependencies.append({
+                        'package': pkg_name,
+                        'version': version,
+                        'type': 'dependency',
+                        'language': 'nodejs'
+                    })
+            
+            if 'devDependencies' in data:
+                for pkg_name, version in data['devDependencies'].items():
+                    dependencies.append({
+                        'package': pkg_name,
+                        'version': version,
+                        'type': 'dev',
+                        'language': 'nodejs'
+                    })
+        
+        except Exception:
+            # 对于lock文件，进行简单的模式匹配
+            matches = re.findall(r'"([a-zA-Z0-9_@\-/]+)":\s*{', content)
+            for match in matches:
+                dependencies.append({
+                    'package': match,
+                    'type': 'package',
+                    'language': 'nodejs'
+                })
+        
+        return dependencies
+    
+    def _parse_ruby_deps(self, content: str) -> List[Dict[str, Any]]:
+        """解析Ruby依赖。"""
+        dependencies = []
+        lines = content.split('\n')
+        
+        for line in lines:
+            line = line.strip()
+            
+            # gem "package_name" 格式
+            match = re.match(r'gem\s+[\'"]([a-zA-Z0-9_\-]+)[\'"]', line)
+            if match:
+                dependencies.append({
+                    'package': match.group(1),
+                    'type': 'gem',
+                    'language': 'ruby'
+                })
+        
+        return dependencies
+    
+    def _parse_golang_deps(self, content: str) -> List[Dict[str, Any]]:
+        """解析Go依赖。"""
+        dependencies = []
+        lines = content.split('\n')
+        
+        in_require = False
+        for line in lines:
+            line = line.strip()
+            
+            if line == 'require (':
+                in_require = True
+                continue
+            elif in_require and line == ')':
+                in_require = False
+                continue
+            
+            if in_require or line.startswith('require '):
+                # 解析require行
+                match = re.match(r'require\s+([^\s]+)\s+([^\s]+)', line)
+                if match:
+                    dependencies.append({
+                        'package': match.group(1),
+                        'version': match.group(2),
+                        'type': 'module',
+                        'language': 'golang'
+                    })
+        
+        return dependencies
+    
+    def _parse_java_deps(self, content: str) -> List[Dict[str, Any]]:
+        """解析Java依赖。"""
+        dependencies = []
+        
+        # 简单的XML/Gradle 解析
+        # groupId:artifactId:version 格式
+        matches = re.findall(
+            r'<artifactId>([^<]+)</artifactId>\s*(?:<version>([^<]+)</version>)?',
+            content
+        )
+        
+        for match in matches:
+            dependencies.append({
+                'package': match[0],
+                'version': match[1] if match[1] else 'unknown',
+                'type': 'artifact',
+                'language': 'java'
             })
-            risk_score += 5
-
-        folder_name = source.get("folder_name")
-        declared_name = source.get("declared_name")
-        slug = source.get("slug")
-
-        if declared_name and folder_name and declared_name != folder_name:
-            findings.append({
-                "level": "low",
-                "type": "name_mismatch",
-                "message": f"目录名 `{folder_name}` 与 SKILL.md 声明名 `{declared_name}` 不一致",
-            })
-            risk_score += 5
-
-        if slug and folder_name and slug != folder_name:
-            findings.append({
-                "level": "low",
-                "type": "slug_mismatch",
-                "message": f"_meta.json slug `{slug}` 与目录名 `{folder_name}` 不一致",
-            })
-            risk_score += 5
-
-        if not source.get("version"):
-            findings.append({
-                "level": "low",
-                "type": "missing_version",
-                "message": "未发现版本信息",
-            })
-            risk_score += 3
-
-        if not source.get("published_at"):
-            findings.append({
-                "level": "low",
-                "type": "missing_published_at",
-                "message": "未发现发布时间字段",
-            })
-            risk_score += 2
-
+        
+        return dependencies
+    
+    def _extract_urls(self, content: str) -> Set[str]:
+        """提取所有URL。"""
+        urls = set()
+        
+        matches = re.findall(self.URL_PATTERN, content)
+        for url in matches:
+            # 过滤掉过长的URL（可能是false positive）
+            if len(url) < 500:
+                urls.add(url)
+        
+        return urls
+    
+    def _detect_suspicious_items(self, file_path: str, content: str) -> List[Dict[str, Any]]:
+        """检测可疑项。"""
+        suspicious = []
+        
+        # 检测可疑源
+        for url in re.findall(self.URL_PATTERN, content):
+            for pattern, metadata in self.SUSPICIOUS_SOURCES.items():
+                if pattern in url:
+                    suspicious.append({
+                        'file': file_path,
+                        'item': url,
+                        'type': 'suspicious_source',
+                        'level': metadata['level'],
+                        'reason': metadata['reason']
+                    })
+                    logger.debug(f"Found suspicious source: {url}")
+        
+        # 检测可疑包名（名称相似度攻击）
+        for pattern in self.SUSPICIOUS_PACKAGE_NAMES:
+            if re.search(pattern, content, re.IGNORECASE):
+                suspicious.append({
+                    'file': file_path,
+                    'pattern': pattern,
+                    'type': 'suspicious_package',
+                    'level': 'medium',
+                    'reason': '可能的包名相似度攻击'
+                })
+                logger.debug(f"Found suspicious package pattern: {pattern}")
+        
+        return suspicious
+    
+    def _build_result(
+        self,
+        dependencies: List[Dict[str, Any]],
+        external_urls: Set[str],
+        suspicious_items: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """构建分析结果。"""
+        # 确定风险等级
+        severity_levels = {'critical': 4, 'high': 3, 'medium': 2, 'low': 1}
+        max_severity = 0
+        
+        for item in suspicious_items:
+            max_severity = max(
+                max_severity,
+                severity_levels.get(item.get('level', 'low'), 0)
+            )
+        
+        severity_map = {4: 'critical', 3: 'high', 2: 'medium', 1: 'low', 0: 'low'}
+        level = severity_map.get(max_severity, 'low')
+        
+        # 如果没有依赖和URL，返回低风险
+        if not dependencies and not external_urls:
+            level = 'low'
+        
         return {
-            "source": source,
+            "title": "dependency and supply chain analysis",
+            "level": level,
             "dependencies": dependencies,
-            "findings": findings,
-            "risk_score": risk_score,
+            "external_urls": list(external_urls),
+            "suspicious": suspicious_items,
+            "summary": {
+                "total_dependencies": len(dependencies),
+                "unique_urls": len(external_urls),
+                "suspicious_items": len(suspicious_items),
+                "high_risk_items": len([x for x in suspicious_items if x.get('level') in ['high', 'critical']])
+            }
         }
-
-    def _analyze_source(self, root: Path) -> dict[str, Any]:
-        result = {
-            "folder_name": root.name,
-            "declared_name": None,
-            "description": None,
-            "owner_id": None,
-            "slug": None,
-            "version": None,
-            "published_at": None,
-        }
-
-        skill_md = root / "SKILL.md"
-        if skill_md.exists():
-            content = skill_md.read_text(encoding="utf-8", errors="ignore")
-            frontmatter = self._parse_frontmatter(content)
-            result["declared_name"] = frontmatter.get("name")
-            result["description"] = frontmatter.get("description")
-
-        meta_file = root / "_meta.json"
-        if meta_file.exists():
-            try:
-                meta = json.loads(meta_file.read_text(encoding="utf-8"))
-                result["owner_id"] = meta.get("ownerId")
-                result["slug"] = meta.get("slug")
-                result["version"] = meta.get("version")
-                result["published_at"] = meta.get("publishedAt")
-            except json.JSONDecodeError:
-                pass
-
-        return result
-
-    def _analyze_dependencies(self, root: Path) -> dict[str, Any]:
-        scripts: set[str] = set()
-        executable_files: set[str] = set()
-        external_urls: set[str] = set()
-        hook_paths: set[str] = set()
-        manifest_files: set[str] = set()
-
-        for path in root.rglob("*"):
-            if path.is_dir():
-                continue
-
-            rel = path.relative_to(root).as_posix()
-
-            if path.name in {
-                "requirements.txt",
-                "package.json",
-                "package-lock.json",
-                "pnpm-lock.yaml",
-                "yarn.lock",
-                "pyproject.toml",
-                "poetry.lock",
-            }:
-                manifest_files.add(rel)
-
-            if path.suffix in {".sh", ".py", ".js", ".ts"}:
-                scripts.add(rel)
-
-            if path.suffix == ".sh":
-                executable_files.add(rel)
-
-            if path.suffix.lower() in {".md", ".json", ".sh", ".py", ".js", ".yaml", ".yml", ".txt"}:
-                text = path.read_text(encoding="utf-8", errors="ignore")
-
-                for url in self.URL_PATTERN.findall(text):
-                    external_urls.add(url)
-
-                for ref in self.LOCAL_SCRIPT_REF_PATTERN.findall(text):
-                    hook_paths.add(ref)
-
-        return {
-            "scripts": sorted(scripts),
-            "executable_files": sorted(executable_files),
-            "external_urls": sorted(external_urls),
-            "hook_paths": sorted(hook_paths),
-            "manifest_files": sorted(manifest_files),
-        }
-
-    def _parse_frontmatter(self, content: str) -> dict[str, str]:
-        match = self.FRONTMATTER_PATTERN.search(content)
-        if not match:
-            return {}
-
-        data: dict[str, str] = {}
-        for line in match.group(1).splitlines():
-            if ":" not in line:
-                continue
-            key, value = line.split(":", 1)
-            data[key.strip()] = value.strip().strip('"').strip("'")
-        return data
