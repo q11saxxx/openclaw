@@ -1,0 +1,362 @@
+{
+  "metadata": {
+    "skill_name": "SSH Penetration Testing",
+    "version": "1.0.0",
+    "skill_path": "F:\\skill test",
+    "scan_time": "2026-04-04T23:23:01.351136",
+    "engine_version": "OpenClaw-Risk-Platform-V1"
+  },
+  "summary": {
+    "risk_level": "CRITICAL",
+    "recommendation": "REJECT",
+    "confidence": 0.93,
+    "finding_count": 6,
+    "severity_distribution": {
+      "critical": 1,
+      "high": 3,
+      "medium": 1,
+      "low": 1
+    },
+    "overall_summary": "检测到 1 项严重安全威胁，已直接拦截。"
+  },
+  "findings": [
+    {
+      "agent": "static_security",
+      "type": "static script analysis",
+      "risk_level": "high",
+      "reason": "静态扫描发现script_analysis异常",
+      "evidence": [
+        {
+          "file": "F:\\skill test\\semgrep\\app.py",
+          "line": 15,
+          "pattern": "system",
+          "severity": "high",
+          "content": "os.system(\"echo \" + username)  # 危险！",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "F:\\skill test\\semgrep\\app.py",
+          "line": 15,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "os.system(\"echo \" + username)  # 危险！",
+          "type": "dangerous_command"
+        }
+      ]
+    },
+    {
+      "agent": "static_security",
+      "type": "file permission and sensitive path analysis",
+      "risk_level": "critical",
+      "reason": "静态扫描发现permission_analysis异常",
+      "evidence": [
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_path": "/root",
+          "level": "critical",
+          "reason": "根用户主目录",
+          "content": "/root/.ssh/",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_path": "/root/.ssh",
+          "level": "critical",
+          "reason": "根用户SSH密钥",
+          "content": "/root/.ssh/",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 319,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "cat /etc/passwd | grep -v nologin",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 316,
+          "target_path": "/etc/ssh/sshd_config",
+          "level": "high",
+          "reason": "SSH配置",
+          "content": "cat /etc/ssh/sshd_config",
+          "type": "critical_config"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 183,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_rsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 184,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_dsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 185,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_ecdsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 186,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "~/.ssh/id_ed25519",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 188,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "/root/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 189,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "/home/*/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 192,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "curl -s http://target.com/.ssh/id_rsa",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 308,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "ls -la ~/.ssh/",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 309,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "cat ~/.ssh/known_hosts",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 310,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "cat ~/.ssh/authorized_keys",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 313,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "echo \"ssh-rsa AAAAB3...\" >> ~/.ssh/authorized_keys",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 323,
+          "target_file": ".bash_history",
+          "level": "medium",
+          "reason": "命令历史",
+          "content": "cat ~/.bash_history | grep -i ssh",
+          "type": "private_file"
+        },
+        {
+          "file": "F:\\skill test\\SKILL.md",
+          "line": 324,
+          "target_file": ".bash_history",
+          "level": "medium",
+          "reason": "命令历史",
+          "content": "cat ~/.bash_history | grep -i pass",
+          "type": "private_file"
+        }
+      ]
+    },
+    {
+      "agent": "static_security",
+      "type": "检测敏感路径访问",
+      "risk_level": "high",
+      "reason": "静态扫描发现rule_engine异常",
+      "evidence": [
+        "F:\\skill test\\SKILL.md:319:cat /etc/passwd | grep -v nologin"
+      ]
+    },
+    {
+      "agent": "semantic_audit",
+      "type": "static_pattern_match",
+      "risk_level": "high",
+      "confidence": 0.8,
+      "evidence": [
+        {
+          "pattern": "bypass",
+          "matched_text": "bypass",
+          "location": "Offset: 4445"
+        }
+      ],
+      "reason": "匹配到 1 处已知的恶意提示词模式",
+      "file": "SKILL.md"
+    },
+    {
+      "agent": "provenance",
+      "type": "anonymous_publication",
+      "risk_level": "medium",
+      "reason": "该 Skill 未声明有效作者身份，存在匿名投毒和不可追溯风险。",
+      "evidence": {
+        "type": "anonymous_publication",
+        "level": "medium",
+        "message": "该 Skill 未声明有效作者身份，存在匿名投毒和不可追溯风险。"
+      }
+    },
+    {
+      "agent": "provenance",
+      "type": "missing_license",
+      "risk_level": "low",
+      "reason": "未检测到开源许可证声明，可能存在合规性隐患。",
+      "evidence": {
+        "type": "missing_license",
+        "level": "low",
+        "message": "未检测到开源许可证声明，可能存在合规性隐患。"
+      }
+    }
+  ],
+  "parsed_facts": {
+    "structure": {
+      "path": "F:\\skill test",
+      "skill_md_found": true,
+      "manifest_files": [
+        "SKILL.md"
+      ],
+      "entry_points": [
+        {
+          "path": "semgrep/app.py",
+          "type": "nested"
+        }
+      ],
+      "files": [
+        {
+          "path": "package.json",
+          "name": "package.json",
+          "suffix": ".json",
+          "size": 63
+        },
+        {
+          "path": "requirements.txt",
+          "name": "requirements.txt",
+          "suffix": ".txt",
+          "size": 44
+        },
+        {
+          "path": "result.json",
+          "name": "result.json",
+          "suffix": ".json",
+          "size": 62381
+        },
+        {
+          "path": "SKILL.md",
+          "name": "SKILL.md",
+          "suffix": ".md",
+          "size": 12140
+        },
+        {
+          "path": "semgrep/app.py",
+          "name": "app.py",
+          "suffix": ".py",
+          "size": 441
+        },
+        {
+          "path": "semgrep/semgrep_result.json",
+          "name": "semgrep_result.json",
+          "suffix": ".json",
+          "size": 4224
+        }
+      ],
+      "structure": {
+        "total_files": 6,
+        "total_dirs": 1,
+        "subdirectories": [
+          "semgrep"
+        ],
+        "file_types": {
+          ".json": 3,
+          ".txt": 1,
+          ".md": 1,
+          ".py": 1
+        },
+        "manifest_files": [
+          "SKILL.md"
+        ]
+      },
+      "errors": []
+    },
+    "manifest": {
+      "name": "SSH Penetration Testing",
+      "version": "1.0.0",
+      "description": "This skill should be used when the user asks to \"pentest SSH services\", \"enumerate SSH configurations\", \"brute force SSH credentials\", \"exploit SSH vulnerabilities\", \"perform SSH tunneling\", or \"audit SSH security\". It provides comprehensive SSH penetration testing methodologies and techniques.",
+      "author": "",
+      "license": "",
+      "compatible_versions": [],
+      "dependencies": [],
+      "tags": [
+        "ssh",
+        "penetration-testing",
+        "brute-force",
+        "tunneling",
+        "enumeration",
+        "security"
+      ],
+      "custom_fields": {},
+      "path": "F:\\skill test",
+      "manifest_files": [
+        "SKILL.md"
+      ],
+      "frontmatter_found": true,
+      "manifest_source": "SKILL.md",
+      "parse_errors": [],
+      "is_valid": true
+    },
+    "validation": {
+      "warnings": [],
+      "errors": [],
+      "checks": {
+        "skill_md_found": true,
+        "manifest_found": true,
+        "name_available": true,
+        "version_valid": true,
+        "file_count_reasonable": true
+      }
+    }
+  }
+}
