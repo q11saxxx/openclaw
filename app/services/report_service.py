@@ -1,4 +1,4 @@
-
+# app/services/report_service.py
 
 import datetime
 import json
@@ -68,6 +68,8 @@ class ReportService:
         """生成人类可读的 Markdown 报告"""
         summ = report['summary']
         meta = report['metadata']
+        parsed_facts = report.get('parsed_facts', {})
+        manifest = parsed_facts.get('manifest', {}) 
 
         md = f"""# OpenClaw Skill 供应链安全审计报告
 
@@ -77,6 +79,14 @@ class ReportService:
 - **处置建议**: `{summ['recommendation']}`
 - **置信度**: {round(summ['confidence'] * 100, 2)}%
 - **扫描路径**: `{meta['skill_path']}`
+
+---
+
+## 1.5 供应链溯源摘要 (Supply Chain Provenance) 🛡️
+- **开发者身份**: `{manifest.get('author') or '⚠️ 匿名 (Anonymous)'}`
+- **许可证声明**: `{manifest.get('license') or '❌ 未声明'}`
+- **版本合规性**: `{manifest.get('version') or '未知'}`
+- **信誉评估**: {"🔴 风险 - 来源不可信" if not manifest.get('author') else "🟢 正常 - 身份已识别"}
 
 ---
 
