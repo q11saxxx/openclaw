@@ -66,7 +66,7 @@ class UpdateDiffAnalyzer:
     # 可疑的大小变化阈值
     SIZE_CHANGE_THRESHOLD = 0.5  # 50% 变化被认为是可疑的
     
-    def analyze(self, path: str) -> Dict[str, Any]:
+    def analyze(self, path: str = None, current_path: str = None, **kwargs) -> Dict[str, Any]:
         """分析版本差异与投毒风险。
         
         Args:
@@ -82,6 +82,9 @@ class UpdateDiffAnalyzer:
                 "evidence": list           # 具体证据项
             }
         """
+        
+        path = current_path or path
+
         logger.debug(f"Starting update diff analysis for path: {path}")
         
         findings = {
