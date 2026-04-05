@@ -43,8 +43,11 @@ class ReportService:
             "parsed_facts": parsed
         }
         
-        # 保存到磁盘
-        self._save_report_to_disk(report)
+        # 保存到磁盘，返回保存路径以便外部使用 report_id
+        json_file = self._save_report_to_disk(report)
+        # 将生成的报告 id 注入返回结果，便于调用方引用
+        if json_file:
+            report['report_id'] = json_file.stem
         return report
 
     def _save_report_to_disk(self, report: dict):
@@ -60,9 +63,12 @@ class ReportService:
         json_file = output_dir / f"audit_{safe_name}_{timestamp}.json"
         with open(json_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
-            
+
         # 生成并保存 Markdown
-        self._generate_markdown(report, output_dir / f"audit_{safe_name}_{timestamp}.md")
+        md_file = output_dir / f"audit_{safe_name}_{timestamp}.md"
+        self._generate_markdown(report, md_file)
+
+        return json_file
 
     def _generate_markdown(self, report: dict, file_path: Path):
         """生成人类可读的 Markdown 报告"""
@@ -173,3 +179,84 @@ class ReportService:
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(md)
         logger.info(f"Markdown report generated: {file_path}")
+
+    def get_report(self, audit_id: str) -> dict:
+        """读取并返回指定 audit_id 的 JSON 报告内容（data/reports/{audit_id}.json）。"""
+        json_file = Path("data/reports") / f"{audit_id}.json"
+        if not json_file.exists():
+            raise FileNotFoundError(f"Report not found: {audit_id}")
+        with open(json_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            # 注入运行时元信息，便于前端进度显示
+            data.setdefault('report_id', audit_id)
+            data['completed'] = True
+            data['progress'] = 100
+            data.setdefault('logs', [])
+            return data
+
+    def get_report_file_path(self, audit_id: str, fmt: str = 'json') -> Path | None:
+        """返回报告的文件路径（json 或 md），不存在时返回 None。"""
+        base = Path("data/reports")
+        fmt = fmt.lower()
+        if fmt not in ('json', 'md'):
+            fmt = 'json'
+        p = base / f"{audit_id}.{fmt}"
+        return p if p.exists() else None
+
+    def export_report(self, audit_id: str, fmt: str = 'json') -> Path:
+        p = self.get_report_file_path(audit_id, fmt)
+        if not p:
+            raise FileNotFoundError(f"Report file not found: {audit_id}.{fmt}")
+        return p
+
+    def list_reports_by_skill_name(self, skill_name: str) -> list:
+        """列出与 skill_name 对应的报告文件（基于 ReportService 中的命名规范）。
+
+        返回结构示例：
+        [ { "id": "audit_MySkill_20260405_1234", "json": "data/reports/..json", "md": "data/reports/..md", "created_at": "..." }, ... ]
+        """
+        base = Path("data/reports")
+        if not base.exists():
+            return []
+        safe_name = "".join([c if c.isalnum() else "_" for c in (skill_name or "")])
+        pattern = f"audit_{safe_name}_*"
+        results = []
+        for jf in sorted(base.glob(pattern + ".json"), key=lambda p: p.stat().st_mtime, reverse=True):
+            mdf = jf.with_suffix('.md')
+            stem = jf.stem
+            created = jf.stat().st_mtime
+            results.append({
+                "id": stem,
+                "json": str(jf),
+                "md": str(mdf) if mdf.exists() else None,
+                "created_at": datetime.datetime.fromtimestamp(created).isoformat()
+            })
+        return results
+
+    def list_all_reports(self) -> list:
+        """列出所有已生成的审计报告（按时间倒序）。
+
+        返回列表项格式：{id, skill_name, created_at, risk_level, finding_count, json, md}
+        """
+        base = Path("data/reports")
+        if not base.exists():
+            return []
+        out = []
+        for jf in sorted(base.glob("audit_*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+            try:
+                with open(jf, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                meta = data.get('metadata', {})
+                summ = data.get('summary', {})
+                out.append({
+                    'id': jf.stem,
+                    'skill_name': meta.get('skill_name'),
+                    'created_at': meta.get('scan_time') or datetime.datetime.fromtimestamp(jf.stat().st_mtime).isoformat(),
+                    'risk_level': summ.get('risk_level'),
+                    'finding_count': summ.get('finding_count'),
+                    'json': str(jf),
+                    'md': str(jf.with_suffix('.md')) if jf.with_suffix('.md').exists() else None
+                })
+            except Exception:
+                continue
+        return out

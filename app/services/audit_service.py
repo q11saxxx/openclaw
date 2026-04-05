@@ -10,5 +10,5 @@ class AuditService:
     def __init__(self) -> None:
         self.orchestrator = Orchestrator()
 
-    def run_audit(self, skill_path: str) -> dict:
-        return self.orchestrator.run(skill_path)
+    def run_audit(self, skill_path: str, options: dict = None) -> dict:
+        return self.orchestrator.run(skill_path, options=options)

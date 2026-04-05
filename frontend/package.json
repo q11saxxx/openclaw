@@ -1,0 +1,32 @@
+{
+    "name": "openclaw-frontend",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "lint": "eslint --ext .ts,.vue src",
+        "format": "prettier --write \"src/**/*.{ts,tsx,vue,js,json,css,md}\""
+    },
+    "dependencies": {
+        "vue": "^3.3.4",
+        "vue-router": "^4.2.0",
+        "pinia": "^2.0.34",
+        "axios": "^1.4.0",
+        "element-plus": "^2.2.35",
+        "echarts": "^5.4.0",
+        "highlight.js": "^11.8.0",
+        "file-saver": "^2.0.5"
+    },
+    "devDependencies": {
+        "typescript": "^5.2.2",
+        "vite": "^5.1.0",
+        "@vitejs/plugin-vue": "^4.1.0",
+        "eslint": "^8.50.0",
+        "eslint-plugin-vue": "^9.15.0",
+        "prettier": "^3.0.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.0"
+    }
+}

@@ -1,0 +1,24 @@
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.el-header {
+    background: #409EFF;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+}
+
+.el-aside {
+    background: #f5f7fa;
+}
+
+code,
+pre {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+}

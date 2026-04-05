@@ -3,6 +3,7 @@ from app.core.context import AuditContext
 from app.analyzers.prompt_injection_detector import PromptInjectionDetector
 from app.services.llm_service import LLMService
 
+
 class SemanticAuditAgent(BaseAgent):
     """语义审计代理。
 
@@ -12,15 +13,19 @@ class SemanticAuditAgent(BaseAgent):
     """
     name = "semantic_audit"
 
-  def __init__(self) -> None:
-        super().__init__() # 建议加上这行，初始化父类
+    def __init__(self) -> None:
+        super().__init__()  # 建议加上这行，初始化父类
         self.detector = PromptInjectionDetector()
         self.llm = LLMService()
         print(f"[{self.name}] Agent 初始化成功，已加载探测器和LLM服务")
 
-  def run(self, context: AuditContext) -> None:
+    def run(self, context: AuditContext) -> None:
         skill_path = context.skill_path
         print(f"[{self.name}] 开始分析路径: {skill_path}")
+        # 可通过 context.options 控制是否启用语义审计（例如在发起审计时传入 options: { semantic: false }）
+        if isinstance(getattr(context, 'options', None), dict) and context.options.get('semantic') is False:
+            print(f"[{self.name}] 语义审计已被禁用（options.semantic=False），跳过 LLM 分析")
+            return
 
         # 1️⃣ 规则检测（第一道防线）
         rule_result = self.detector.detect(skill_path)
@@ -33,14 +38,14 @@ class SemanticAuditAgent(BaseAgent):
             # 👉 有规则命中 → 直接走强模型复核
             llm_result = self.llm.semantic_review(
                 skill_path,
-                force_strong=True
+                force_strong=True,
             )
         else:
             print(f"[{self.name}] 🛡️ 静态规则未命中。启动轻量模型初筛...")
             # 👉 无规则命中 → 走“轻量模型初筛”
             llm_result = self.llm.semantic_review(
                 skill_path,
-                force_strong=False
+                force_strong=False,
             )
 
         # 2️⃣ 智能处理 LLM 结果

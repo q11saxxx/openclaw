@@ -22,10 +22,12 @@ class AuditPipeline:
         self.decision_agent = DecisionAgent()
         self.report_agent = ReportAgent()
 
-    def run(self, skill_path: str, previous_skill_path: str = None) -> dict:
+    def run(self, skill_path: str, previous_skill_path: str = None, options: dict = None) -> dict:
+        # 将 options 注入 Context，便于 Agent 根据选项调整行为
         context = AuditContext(
         skill_path=skill_path,
         previous_skill_path=previous_skill_path,
+        options=options or {},
         )
         self.parser_agent.run(context)
         self.static_agent.run(context)

@@ -1,0 +1,176 @@
+{
+  "items": [
+    {
+      "name": "README.md",
+      "path": "data\\uploads\\f8e020c58129232251c1e595d4e5d79af925b1f2_README.md",
+      "filename": "README.md",
+      "size": 1035,
+      "sha256": "295b7aa9f1f166a5a00afb11295eb069c2a28791253a29a36a02f782c07d4071",
+      "status": "uploaded",
+      "id": "ef1f431f1d3e466abc5caee8af94a093",
+      "created_at": "2026-04-05T04:00:59.108339"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\c5770626d1e157bf136d60c9d89a5af3118130f0_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "1e42f46fdda748369ebd6cd90a051fc3",
+      "created_at": "2026-04-05T04:07:58.534603"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\7067252aef6ea5389925e7f949c38c991dff1b40_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "5dad50d952fa452a9c581cf01e8c2d49",
+      "created_at": "2026-04-05T04:08:44.285208"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\9c8255c975a4dc2559c2280000440db14d80d784_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "8992964d1f2f4340912c81455e496a92",
+      "created_at": "2026-04-05T04:18:41.450953"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\7d550922af1c64ba405b0ad9b6c84f9e52cc18ac_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "1b4e85661638475c9842dcd919845417",
+      "created_at": "2026-04-05T04:23:19.492039"
+    },
+    {
+      "name": "README.md",
+      "path": "data\\uploads\\a64b125f8dc6cc30799aec526c5397e9d730b0c5_README.md",
+      "filename": "README.md",
+      "size": 1035,
+      "sha256": "295b7aa9f1f166a5a00afb11295eb069c2a28791253a29a36a02f782c07d4071",
+      "status": "uploaded",
+      "id": "597d6a1eb97b48cca31a4007700003d8",
+      "created_at": "2026-04-05T04:24:27.323202"
+    },
+    {
+      "name": "README.md",
+      "path": "data\\uploads\\a24ee435caecaa4015062a890a84fb0071b591da_README.md",
+      "filename": "README.md",
+      "size": 1035,
+      "sha256": "295b7aa9f1f166a5a00afb11295eb069c2a28791253a29a36a02f782c07d4071",
+      "status": "uploaded",
+      "id": "7d65a21bd03b4c03882ab58f2d0eea64",
+      "created_at": "2026-04-05T05:34:29.753800"
+    },
+    {
+      "name": "SKILL.md",
+      "path": "data\\uploads\\ae96c60b415598e0c888e89a50a1639812a4452a_SKILL.md",
+      "filename": "SKILL.md",
+      "size": 21606,
+      "sha256": "6ef2c135267c1173b6b065f73be4aad7fb51acabc500a4fe64b6df846125ecb6",
+      "status": "uploaded",
+      "id": "62024a6be668479db95578ba388e8379",
+      "created_at": "2026-04-05T06:11:28.407852"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\92c5764c4cdf2ca2e86269706a4ebcd0d2b78edb_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "f98cfe4884da40a3b7d7193e4d4def22",
+      "created_at": "2026-04-05T06:23:54.841682"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\85e65d6e4cb5e45ec2d4875249eeed215ad8386b_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "5ae529dbc36b4a80b48eeef106311dba",
+      "created_at": "2026-04-05T06:53:19.521932"
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\4c1747ab121d226428bb1909a7920438a700729e_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "67c3ca29421e454e9e9233942703e245",
+      "created_at": "2026-04-05T09:08:25.535539",
+      "quick_check": {
+        "timestamp": "2026-04-05T09:08:25.548232",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      }
+    },
+    {
+      "name": "self-improving-agent-3.0.10.zip",
+      "path": "data\\uploads\\4b2d442d108e1f935623d721e300dd2a05db7ec8_self-improving-agent-3.0.10.zip",
+      "filename": "self-improving-agent-3.0.10.zip",
+      "size": 22940,
+      "sha256": "c70f35aedbbcb71ff001ce4c14a60f5ab4c749606814010c100fbaed6f23a7d2",
+      "status": "uploaded",
+      "id": "bfe6caeb17ec41f8961d9da464ab72dd",
+      "created_at": "2026-04-05T09:08:58.036351",
+      "quick_check": {
+        "timestamp": "2026-04-05T09:08:58.040156",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      }
+    }
+  ]
+}

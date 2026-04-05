@@ -10,5 +10,5 @@ class Orchestrator:
     def __init__(self) -> None:
         self.pipeline = AuditPipeline()
 
-    def run(self, skill_path: str) -> dict:
-        return self.pipeline.run(skill_path)
+    def run(self, skill_path: str, options: dict = None) -> dict:
+        return self.pipeline.run(skill_path, previous_skill_path=None, options=options)

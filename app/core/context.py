@@ -9,6 +9,8 @@ class AuditContext:
     
     # 记录审计开始时间，用于报告生成
     start_time: datetime.datetime = field(default_factory=datetime.datetime.now)
+    # 运行选项，例如是否启用语义审计
+    options: dict[str, Any] = field(default_factory=dict)
     
     # 核心数据存储
     parsed: dict[str, Any] = field(default_factory=dict)
@@ -36,6 +38,7 @@ class AuditContext:
         data = {
             "skill_path": self.skill_path,
             "previous_skill_path": self.previous_skill_path,
+            "options": self.options,
             "start_time": self.start_time.isoformat(),
             "parsed": self.parsed,
             "findings": self.findings,
