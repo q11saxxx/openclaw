@@ -34,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_router)
+
 
 app.include_router(rule_routes.router, prefix="/rules", tags=["Rules"])
 @app.get("/")
