@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 from app.config.settings import settings
+from app.api.v1 import rule_routes 
 
 # 禁用 FastAPI 的自动尾部斜杠重定向
 app = FastAPI(
@@ -35,6 +36,7 @@ app.add_middleware(
 
 app.include_router(api_router)
 
+app.include_router(rule_routes.router, prefix="/rules", tags=["Rules"])
 @app.get("/")
 def root() -> dict:
     return {"message": settings.app_name, "status": "ok"}

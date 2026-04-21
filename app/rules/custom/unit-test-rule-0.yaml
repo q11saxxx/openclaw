@@ -1,0 +1,5 @@
+rules:
+- id: unit-test-rule-0
+  level: low
+  pattern: test_pattern
+  title: Test Level low

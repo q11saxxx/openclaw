@@ -9,9 +9,11 @@ from app.api.v1.skill_routes import router as skill_router
 from app.api.v1.audit_routes import router as audit_router
 from app.api.v1.report_routes import router as report_router
 from app.api.v1.health_routes import router as health_router
+from app.api.v1.rule_routes import router as rule_router
 
 api_router = APIRouter()
 api_router.include_router(health_router, prefix="/health", tags=["health"])
 api_router.include_router(skill_router, prefix="/skills", tags=["skills"])
 api_router.include_router(audit_router, prefix="/audits", tags=["audits"])
 api_router.include_router(report_router, prefix="/reports", tags=["reports"])
+api_router.include_router(rule_router, prefix="/rules", tags=["rules"])

@@ -1,0 +1,5 @@
+rules:
+- id: test-invalid-update
+  level: high
+  pattern: test_pattern
+  title: Test Rule

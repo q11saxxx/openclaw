@@ -73,6 +73,39 @@ class DependencyAnalyzer:
         r'numpy.*s',
         r'pandas.*s',
     ]
+
+    # 支持代码引用检测的文件扩展名
+    CODE_FILE_EXTENSIONS = {
+        '.py', '.js', '.ts', '.jsx', '.tsx', '.rb', '.go', '.java', '.php', '.sh', '.bash'
+    }
+
+    # 常见代码语言导入/依赖引用模式
+    LANGUAGE_IMPORT_PATTERNS = {
+        'python': [
+            (r'^\s*import\s+([a-zA-Z0-9_\.]+)', 'python_import'),
+            (r'^\s*from\s+([a-zA-Z0-9_\.]+)\s+import', 'python_from_import'),
+        ],
+        'javascript': [
+            (r'require\(\s*[\"\']([^\"\']+)[\"\']\s*\)', 'node_require'),
+            (r'^\s*import\s+.*from\s+[\"\']([^\"\']+)[\"\']', 'node_import'),
+            (r'^\s*import\s+[\"\']([^\"\']+)[\"\']', 'node_side_effect_import'),
+        ],
+        'ruby': [
+            (r'^\s*require\s+[\"\']([^\"\']+)[\"\']', 'ruby_require'),
+        ],
+        'golang': [
+            (r'^\s*import\s+[\"\']([^\"\']+)[\"\']', 'go_import'),
+        ],
+        'java': [
+            (r'^\s*import\s+([a-zA-Z0-9_\.]+);', 'java_import'),
+        ],
+        'php': [
+            (r'^\s*use\s+([a-zA-Z0-9_\\]+);', 'php_import'),
+        ],
+        'shell': [
+            (r'^\s*source\s+[\"\']?([^\"\'\s]+)[\"\']?', 'shell_source'),
+        ],
+    }
     
     def analyze(self, path: str) -> Dict[str, Any]:
         """分析依赖与供应链风险。
@@ -84,11 +117,12 @@ class DependencyAnalyzer:
             包含分析结果的字典，格式为：
             {
                 "title": str,          # 分析标题
-                "level": str,          # 风险等级
-                "dependencies": list,  # 发现的依赖项
-                "external_urls": list, # 发现的外部URL
-                "suspicious": list,    # 可疑项目
-                "summary": dict        # 统计摘要
+                "level": str,             # 风险等级
+                "dependencies": list,     # 发现的依赖项
+                "external_urls": list,    # 发现的外部URL
+                "code_references": list,  # 代码引用的第三方库
+                "suspicious": list,       # 可疑项目
+                "summary": dict           # 统计摘要
             }
         """
         logger.debug(f"Starting dependency analysis for path: {path}")
@@ -96,6 +130,7 @@ class DependencyAnalyzer:
         dependencies = []
         external_urls = set()
         suspicious_items = []
+        code_references = []
         
         try:
             # 查找所有文件
@@ -117,6 +152,12 @@ class DependencyAnalyzer:
                         if file_deps:
                             dependencies.extend(file_deps)
                     
+                    # 检测代码中的第三方库引用
+                    if self._is_code_file(file_path):
+                        refs = self._detect_code_references(file_path, content)
+                        if refs:
+                            code_references.extend(refs)
+                    
                     # 提取所有URL
                     urls = self._extract_urls(content)
                     external_urls.update(urls)
@@ -125,13 +166,9 @@ class DependencyAnalyzer:
                     suspicious = self._detect_suspicious_items(file_path, content)
                     if suspicious:
                         suspicious_items.extend(suspicious)
-                
                 except Exception as e:
                     logger.warning(f"Error analyzing file {file_path}: {str(e)}")
                     continue
-            
-            return self._build_result(dependencies, external_urls, suspicious_items)
-        
         except Exception as e:
             logger.error(f"Error during dependency analysis: {str(e)}", exc_info=True)
             return {
@@ -141,6 +178,8 @@ class DependencyAnalyzer:
                 "external_urls": [],
                 "error": str(e)
             }
+        
+        return self._build_result(dependencies, external_urls, suspicious_items, code_references)
     
     def _find_all_files(self, path: str) -> List[str]:
         """递归查找所有文件。"""
@@ -177,6 +216,189 @@ class DependencyAnalyzer:
                 return f.read()
         except Exception:
             return None
+    
+    def _is_code_file(self, file_path: str) -> bool:
+        """判断文件是否为代码文件。"""
+        return Path(file_path).suffix.lower() in self.CODE_FILE_EXTENSIONS
+    
+    def _is_local_reference(self, module_name: str) -> bool:
+        """判断导入是否为本地模块或相对引用。"""
+        return module_name.startswith('.') or module_name.startswith('/')
+    
+    def _language_from_ext(self, extension: str) -> str:
+        if extension in {'.py'}:
+            return 'python'
+        if extension in {'.js', '.jsx', '.ts', '.tsx'}:
+            return 'javascript'
+        if extension in {'.rb'}:
+            return 'ruby'
+        if extension in {'.go'}:
+            return 'golang'
+        if extension in {'.java'}:
+            return 'java'
+        if extension in {'.php'}:
+            return 'php'
+        if extension in {'.sh', '.bash'}:
+            return 'shell'
+        return 'unknown'
+    
+    def _detect_code_references(self, file_path: str, content: str) -> List[Dict[str, Any]]:
+        """检测代码文件中的第三方库引用，并进行安全性评估。"""
+        references = []
+        extension = Path(file_path).suffix.lower()
+        language = self._language_from_ext(extension)
+        lines = content.splitlines()
+
+        patterns = self.LANGUAGE_IMPORT_PATTERNS.get(language, [])
+        if not patterns:
+            return references
+
+        for line_num, line in enumerate(lines, start=1):
+            stripped = line.strip()
+            if not stripped or stripped.startswith('#') or stripped.startswith('//'):
+                continue
+
+            for pattern, import_type in patterns:
+                match = re.search(pattern, stripped)
+                if not match:
+                    continue
+
+                module_name = match.group(1).strip()
+                if not module_name or self._is_local_reference(module_name):
+                    continue
+
+                ref = {
+                    'file': file_path,
+                    'line': line_num,
+                    'module': module_name,
+                    'import_type': import_type,
+                    'language': language,
+                }
+                
+                # 对第三方库进行安全检查
+                security_check = self._check_library_security(module_name, language)
+                ref['security_check'] = security_check
+                
+                references.append(ref)
+                break
+
+        return references
+    
+    def _check_library_security(self, module_name: str, language: str) -> Dict[str, Any]:
+        """对第三方库进行安全性检查。"""
+        security_issues = []
+        risk_level = 'safe'
+        
+        # 1. 检测已知恶意或可疑包
+        malicious = self._check_malicious_package(module_name)
+        if malicious:
+            security_issues.append(malicious)
+            risk_level = 'critical'
+        
+        # 2. 检测包名相似度攻击 (typosquatting)
+        typo_risk = self._check_typosquatting(module_name, language)
+        if typo_risk:
+            security_issues.append(typo_risk)
+            if risk_level != 'critical':
+                risk_level = 'high'
+        
+        # 3. 检测常见包的安全使用模式
+        pattern_risk = self._check_dangerous_patterns(module_name)
+        if pattern_risk:
+            security_issues.append(pattern_risk)
+            if risk_level == 'safe':
+                risk_level = 'medium'
+        
+        return {
+            'risk_level': risk_level,
+            'issues': security_issues,
+            'safe': risk_level == 'safe'
+        }
+    
+    def _check_malicious_package(self, module_name: str) -> Dict[str, Any] | None:
+        """检查已知恶意包列表。"""
+        # 已知恶意包示例（在实际应用中应从外部数据源加载）
+        known_malicious = {
+            'event-stream': {
+                'reason': '历史上存在供应链攻击',
+                'level': 'critical'
+            },
+            'eslint-scope': {
+                'reason': '曾被入侵，发布恶意版本',
+                'level': 'critical'
+            },
+            'ua-parser-js': {
+                'reason': '曾被入侵，发布恶意版本',
+                'level': 'critical'
+            },
+        }
+        
+        if module_name.lower() in known_malicious:
+            data = known_malicious[module_name.lower()]
+            return {
+                'type': 'malicious_package',
+                'package': module_name,
+                'level': data['level'],
+                'reason': data['reason']
+            }
+        
+        return None
+    
+    def _check_typosquatting(self, module_name: str, language: str) -> Dict[str, Any] | None:
+        """检测包名相似度攻击（typosquatting）。"""
+        # 常见的目标包及其常见拼写错误
+        common_packages = {
+            'python': {
+                'requests': ['reqests', 'request', 'reqeust', 'requests-', 'request-'],
+                'django': ['dajngo', 'djanog', 'django-'],
+                'flask': ['flak', 'flask-'],
+                'numpy': ['numpyy', 'numpy-'],
+                'pandas': ['panda', 'pandas-'],
+            },
+            'javascript': {
+                'react': ['reactjs', 'react-', 'reat'],
+                'vue': ['vuejs', 'vue-', 'veu'],
+                'express': ['expresss', 'express-', 'expres'],
+                'lodash': ['lodashjs', 'lodash-', 'lodash_'],
+                'axios': ['axiosjs', 'axios-'],
+            }
+        }
+        
+        target_packages = common_packages.get(language, {})
+        
+        for legitimate, suspicious_variants in target_packages.items():
+            if module_name.lower() in suspicious_variants:
+                return {
+                    'type': 'typosquatting_risk',
+                    'package': module_name,
+                    'suggested_package': legitimate,
+                    'level': 'high',
+                    'reason': f'包名可能是 "{legitimate}" 的拼写错误'
+                }
+        
+        return None
+    
+    def _check_dangerous_patterns(self, module_name: str) -> Dict[str, Any] | None:
+        """检查危险的包名模式或命名约定。"""
+        # 检查可疑的包名模式
+        suspicious_patterns = [
+            (r'^admin', 'admin类包名可能被滥用'),
+            (r'^root', 'root类包名可能被滥用'),
+            (r'^crypto.*steal', '包名包含可疑词汇'),
+            (r'^payload', '包名包含恶意关键词'),
+            (r'^backdoor', '包名包含恶意关键词'),
+        ]
+        
+        for pattern, reason in suspicious_patterns:
+            if re.search(pattern, module_name.lower()):
+                return {
+                    'type': 'suspicious_package_name',
+                    'package': module_name,
+                    'level': 'medium',
+                    'reason': reason
+                }
+        
+        return None
     
     def _parse_dependency_file(
         self,
@@ -407,7 +629,8 @@ class DependencyAnalyzer:
         self,
         dependencies: List[Dict[str, Any]],
         external_urls: Set[str],
-        suspicious_items: List[Dict[str, Any]]
+        suspicious_items: List[Dict[str, Any]],
+        code_references: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """构建分析结果。"""
         # 确定风险等级
@@ -424,7 +647,7 @@ class DependencyAnalyzer:
         level = severity_map.get(max_severity, 'low')
         
         # 如果没有依赖和URL，返回低风险
-        if not dependencies and not external_urls:
+        if not dependencies and not external_urls and not code_references:
             level = 'low'
         
         return {
@@ -432,10 +655,12 @@ class DependencyAnalyzer:
             "level": level,
             "dependencies": dependencies,
             "external_urls": list(external_urls),
+            "code_references": code_references,
             "suspicious": suspicious_items,
             "summary": {
                 "total_dependencies": len(dependencies),
                 "unique_urls": len(external_urls),
+                "code_reference_count": len(code_references),
                 "suspicious_items": len(suspicious_items),
                 "high_risk_items": len([x for x in suspicious_items if x.get('level') in ['high', 'critical']])
             }

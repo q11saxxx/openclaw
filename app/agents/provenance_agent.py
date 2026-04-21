@@ -1,3 +1,5 @@
+# app/agents/provenance_agent.py
+
 from app.agents.base_agent import BaseAgent
 from app.core.context import AuditContext
 from app.analyzers.dependency_analyzer import DependencyAnalyzer
@@ -14,26 +16,47 @@ class ProvenanceAgent(BaseAgent):
         self.update_diff_analyzer = UpdateDiffAnalyzer()
 
     def run(self, context: AuditContext) -> None:
-        logger.info(f"[{self.name}] 正在执行供应链溯源与依赖审计...")
+        logger.info(f"[{self.name}] 正在执行深度供应链、依赖与溯源审计...")
         
         if not isinstance(context.provenance, dict):
             context.provenance = {}
 
-        # 1. 执行具体分析器
+        # 1. 运行核心分析器
         dependency_result = self._safe_run_dependency(context)
         diff_result = self._safe_run_diff(context)
-
-        # 2. 🔥 新增：身份合规性审计 (Identity Audit)
         identity_findings = self._audit_identity(context)
 
-        # 3. 汇总所有原始 Findings
+        # 2. 收集原始风险项 (Raw Findings)
         raw_findings = []
+        raw_findings.extend(identity_findings)
         raw_findings.extend(dependency_result.get("findings", []))
         raw_findings.extend(diff_result.get("findings", []))
-        raw_findings.extend(identity_findings)
 
-        # 4. 🔥 核心修改：将所有 Findings 标准化（映射字段名，防止报告出现 None）
-        standardized_findings = []
+        # --- 🔥 关键增强：提取新版 DependencyAnalyzer 的深度风险 ---
+        
+        # A. 处理可疑项 (Suspicious Items: 包括 Typosquatting 和 恶意源)
+        for item in dependency_result.get("suspicious", []):
+            raw_findings.append({
+                "type": item.get("type"),
+                "level": item.get("level"),
+                "message": f"供应链威胁: {item.get('item') or item.get('package')} - {item.get('reason')}",
+                "evidence": item
+            })
+
+        # B. 处理代码中的第三方库引用风险 (Code Reference Risks)
+        for ref in dependency_result.get("code_references", []):
+            sec_check = ref.get("security_check", {})
+            if not sec_check.get("safe", True):
+                for issue in sec_check.get("issues", []):
+                    raw_findings.append({
+                        "type": issue.get("type"),
+                        "level": issue.get("level"),
+                        "message": f"代码库引用风险: 模块 '{ref.get('module')}' 存在威胁 - {issue.get('reason')}",
+                        "evidence": ref
+                    })
+
+        # 3. 统一标准化映射 (Standardization)
+        # 确保每个项都包含 agent, type, risk_level, reason, evidence
         for f in raw_findings:
             standard_f = {
                 "agent": self.name,
@@ -42,27 +65,25 @@ class ProvenanceAgent(BaseAgent):
                 "reason": f.get("reason") or f.get("message") or "检测到来源或依赖风险",
                 "evidence": f.get("evidence") or f
             }
-            standardized_findings.append(standard_f)
-            # 添加到上下文总列表
             context.add_finding(standard_f)
 
-        # 5. 更新上下文溯源数据
-        risk_score = sum(10 for f in standardized_findings if f["risk_level"] in ["high", "critical"])
+        # 4. 更新 Context 的溯源事实摘要 (用于 Report 展示)
+        sum_data = dependency_result.get("summary", {})
         context.provenance.update({
-            "source": dependency_result.get("source", {}),
-            "dependencies": dependency_result.get("dependencies", {}),
-            "diff": diff_result,
-            "risk_score": risk_score,
-            "trust_score": 1.0 - (risk_score / 100.0), # 简单的信任分计算
-            "summary": self._build_summary(standardized_findings, risk_score)
+            "dependencies": dependency_result.get("dependencies", []),
+            "external_urls": dependency_result.get("external_urls", []),
+            "code_references": dependency_result.get("code_references", []),
+            "diff_summary": diff_result.get("findings", []),
+            "stats": sum_data,
+            # 计算一个简单的信任分数
+            "trust_score": 1.0 - (sum_data.get("high_risk_items", 0) * 0.3),
+            "summary": self._build_summary(raw_findings, sum_data)
         })
 
     def _audit_identity(self, context: AuditContext) -> list:
-        """审计作者身份和许可证 (Identity & Compliance)"""
+        """审计作者身份和许可证"""
         findings = []
         manifest = context.parsed.get("manifest", {})
-        
-        # 检查匿名发布
         author = manifest.get("author")
         if not author or author.lower() in ["unknown", "none", ""]:
             findings.append({
@@ -70,63 +91,29 @@ class ProvenanceAgent(BaseAgent):
                 "level": "medium",
                 "message": "该 Skill 未声明有效作者身份，存在匿名投毒和不可追溯风险。"
             })
-            
-        # 检查许可证
         if not manifest.get("license"):
             findings.append({
                 "type": "missing_license",
                 "level": "low",
                 "message": "未检测到开源许可证声明，可能存在合规性隐患。"
             })
-            
         return findings
 
     def _safe_run_dependency(self, context: AuditContext) -> dict:
         try:
             return self.dependency_analyzer.analyze(context.skill_path)
         except Exception as exc:
-            return {
-                "source": {},
-                "dependencies": {},
-                "findings": [
-                    {
-                        "level": "medium",
-                        "type": "dependency_analyzer_failure",
-                        "message": f"DependencyAnalyzer 执行失败: {exc}",
-                    }
-                ],
-                "risk_score": 10,
-            }
+            return {"findings": [{"level": "medium", "type": "dep_err", "message": str(exc)}]}
 
     def _safe_run_diff(self, context: AuditContext) -> dict:
         try:
-            previous_path = getattr(context, "previous_skill_path", None)
-            return self.update_diff_analyzer.analyze(
-                current_path=context.skill_path,
-                previous_path=previous_path,
-            )
+            prev = getattr(context, "previous_skill_path", None)
+            return self.update_diff_analyzer.analyze(context.skill_path, prev)
         except Exception as exc:
-            return {
-                "has_baseline": False,
-                "findings": [
-                    {
-                        "level": "medium",
-                        "type": "diff_analyzer_failure",
-                        "message": f"UpdateDiffAnalyzer 执行失败: {exc}",
-                    }
-                ],
-                "risk_score": 10,
-            }
+            return {"findings": [{"level": "medium", "type": "diff_err", "message": str(exc)}]}
 
-    def _build_summary(self, findings: list[dict], risk_score: int) -> str:
-        if not findings:
+    def _build_summary(self, findings: list, stats: dict) -> str:
+        if not findings and not stats.get("total_dependencies"):
             return "未发现明显来源、依赖或版本漂移风险。"
-
-        high_count = sum(1 for f in findings if f.get("level") in {"high", "critical"})
-        medium_count = sum(1 for f in findings if f.get("level") == "medium")
-
-        return (
-            f"来源分析完成：共发现 {len(findings)} 项相关问题，"
-            f"其中高风险 {high_count} 项，中风险 {medium_count} 项，"
-            f"来源风险评分为 {risk_score}。"
-        )
+        return (f"识别到 {stats.get('total_dependencies', 0)} 个依赖项和 "
+                f"{stats.get('unique_urls', 0)} 个外部 URL。共发现 {len(findings)} 项风险。")

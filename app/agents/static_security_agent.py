@@ -28,7 +28,8 @@ class StaticSecurityAgent(BaseAgent):
             # 1. 执行脚本与权限分析 (这些通常返回单个 Dict)
             for analyzer_name, analyzer_func in [
                 ("script_analysis", self.script_analyzer.analyze),
-                ("permission_analysis", self.permission_analyzer.analyze)
+                ("permission_analysis", self.permission_analyzer.analyze),
+                ("dependency_analysis", self.dependency_analyzer.analyze)
             ]:
                 result = self._safe_analyze(analyzer_func, context.skill_path, analyzer_name)
                 if result:
@@ -47,27 +48,58 @@ class StaticSecurityAgent(BaseAgent):
             logger.error(f"Static analysis critical failure: {str(e)}", exc_info=True)
 
     def _add_normalized_finding(self, context: AuditContext, raw_data: Dict, category: str) -> None:
-        """核心修复：将不同分析器的输出标准化为统一的 Finding 格式"""
-        
-        # 排除无效数据
         if not self._is_valid_finding(raw_data):
             return
 
-        # 统一字段映射
+        # --- 特殊处理依赖分析：将其拆解为多个具体的 Finding ---
+        if category == "rule_engine" and raw_data.get("title") == "dependency and supply chain analysis":
+            # 1. 把具体的“可疑项”拆出来，每一项都是一个独立的 Finding
+            suspicious_list = raw_data.get("suspicious", [])
+            for item in suspicious_list:
+                context.add_finding({
+                    "agent": self.name,
+                    "type": item.get("type", "suspicious_dependency"),
+                    "risk_level": item.get("level", "medium"),
+                    "reason": f"供应链风险: {item.get('reason')}",
+                    "evidence": {
+                        "file": item.get("file"),
+                        "item": item.get("item") or item.get("pattern"),
+                        "detail": item.get("reason")
+                    }
+                })
+            
+            # 2. 把“恶意库引用”拆出来
+            for ref in raw_data.get("code_references", []):
+                sec = ref.get("security_check", {})
+                if not sec.get("safe", True):
+                    context.add_finding({
+                        "agent": self.name,
+                        "type": "malicious_import",
+                        "risk_level": sec.get("risk_level", "high"),
+                        "reason": f"代码中引入了高风险第三方库: {ref.get('module')}",
+                        "evidence": ref
+                    })
+
+            # 3. 最后只保留一个极简的“概览” (不塞入那 300 个 URL)
+            summary = raw_data.get("summary", {})
+            context.add_finding({
+                "agent": self.name,
+                "type": "dependency_overview",
+                "risk_level": "low",
+                "reason": f"依赖环境概览：共识别 {summary.get('total_dependencies')} 个库，{summary.get('unique_urls')} 个外部链接。",
+                "evidence": f"高风险项已在上方单独列出。其余 {summary.get('unique_urls')} 个链接经过初筛暂无即时威胁。"
+            })
+            return 
+
+        # --- 其他普通分析结果的标准化 (保持不变) ---
         finding = {
-            "agent": self.name,  # 确保来源不为 None
+            "agent": self.name,
             "type": raw_data.get("type") or raw_data.get("title") or f"static_{category}",
             "risk_level": str(raw_data.get("risk_level") or raw_data.get("level") or "low").lower(),
-            "reason": raw_data.get("reason") or raw_data.get("description") or f"静态扫描发现{category}异常",
+            "reason": raw_data.get("reason") or raw_data.get("description") or "检测到异常",
             "evidence": raw_data.get("evidence") or raw_data
         }
-
-        # 纠正一些常见的 level 别名
-        if finding["risk_level"] == "info":
-            finding["risk_level"] = "low"
-
         context.add_finding(finding)
-
     def _safe_analyze(self, analyzer_func: Any, path: str, name: str) -> Dict | None:
         try:
             return analyzer_func(path)
