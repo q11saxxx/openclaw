@@ -1,0 +1,590 @@
+/* ============================================
+   OpenClaw Skill Risk Platform - 全局样式
+   专业级安全审计平台UI设计
+   ============================================ */
+
+:root {
+  /* 主色调 - 深蓝色系 */
+  --primary-color: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  
+  /* 渐变色 */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-blue: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-purple: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-green: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --gradient-orange: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  
+  /* 中性色 */
+  --bg-color: #f8fafc;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  
+  /* 风险等级颜色 */
+  --risk-critical: #dc2626;
+  --risk-high: #ea580c;
+  --risk-medium: #f59e0b;
+  --risk-low: #10b981;
+  
+  /* 阴影系统 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 自定义滚动条 - 更精致 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* ============================================
+   顶部导航栏 - 现代玻璃态设计
+   ============================================ */
+.el-header {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    position: relative;
+    z-index: 100;
+}
+
+.el-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+/* ============================================
+   侧边栏 - 简洁现代风格
+   ============================================ */
+.el-aside {
+    background: var(--bg-card);
+    border-right: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    overflow-y: auto;
+}
+
+.el-menu {
+    border-right: none !important;
+    background: transparent !important;
+    padding: 12px 8px;
+}
+
+.el-menu-item {
+    height: 58px;
+    line-height: 58px;
+    margin: 8px 0;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    color: var(--text-secondary);
+    position: relative;
+    overflow: hidden;
+    font-size: 18px;
+}
+
+.el-menu-item span {
+    font-size: 18px;
+}
+
+.el-menu-item .el-icon {
+    margin-right: 14px;
+    font-size: 22px;
+}
+
+.el-menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--gradient-primary);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    border-radius: 0 2px 2px 0;
+}
+
+.el-menu-item:hover {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, transparent 100%) !important;
+    color: var(--primary-color) !important;
+    transform: translateX(4px);
+}
+
+.el-menu-item:hover::before {
+    transform: scaleY(0.5);
+}
+
+.el-menu-item.is-active {
+    background: linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.05) 100%) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
+.el-menu-item.is-active::before {
+    transform: scaleY(1);
+}
+
+.el-menu-item .el-icon {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+/* ============================================
+   主内容区域
+   ============================================ */
+.el-main {
+    padding: 28px 32px;
+    background-color: var(--bg-color);
+    overflow-y: auto;
+}
+
+/* ============================================
+   卡片系统 - 现代化设计
+   ============================================ */
+.el-card {
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    overflow: hidden;
+}
+
+.el-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.el-card__header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text-primary);
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.5) 0%, transparent 100%);
+}
+
+.el-card__body {
+    padding: 24px;
+}
+
+/* ============================================
+   按钮系统 - 渐变与微交互
+   ============================================ */
+.el-button {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.3px;
+}
+
+.el-button--primary {
+    background: var(--gradient-primary);
+    border: none;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.el-button--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    opacity: 0.95;
+}
+
+.el-button--primary:active {
+    transform: translateY(0);
+}
+
+.el-button--success {
+    background: var(--gradient-green);
+    border: none;
+}
+
+.el-button--warning {
+    background: var(--gradient-orange);
+    border: none;
+}
+
+.el-button--danger {
+    background: var(--gradient-purple);
+    border: none;
+}
+
+/* ============================================
+   表格系统 - 精致设计
+   ============================================ */
+.el-table {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.el-table th.el-table__cell {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.el-table tr:hover > td {
+    background-color: rgba(102, 126, 234, 0.04) !important;
+}
+
+.el-table--enable-row-transition .el-table__body td.el-table__cell {
+    transition: background-color 0.2s;
+}
+
+/* ============================================
+   输入框系统
+   ============================================ */
+.el-input__wrapper {
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+    border: 1px solid var(--border-color);
+}
+
+.el-input__wrapper:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-light);
+}
+
+.el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* ============================================
+   标签系统 - 现代化
+   ============================================ */
+.el-tag {
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border: none;
+}
+
+/* ============================================
+   排版系统
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+/* ============================================
+   动画系统
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   统计卡片 - 渐变背景
+   ============================================ */
+.stat-card {
+    border-radius: 16px;
+    padding: 28px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.stat-card.primary {
+    background: var(--gradient-primary);
+}
+
+.stat-card.danger {
+    background: var(--gradient-purple);
+}
+
+.stat-card.warning {
+    background: var(--gradient-orange);
+}
+
+.stat-card.success {
+    background: var(--gradient-blue);
+}
+
+.stat-card .stat-value {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 12px 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card .stat-label {
+    font-size: 14px;
+    opacity: 0.95;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   对话框优化
+   ============================================ */
+.el-dialog {
+    border-radius: 20px;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+.el-dialog__header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(180deg, #f8fafc 0%, transparent 100%);
+}
+
+.el-dialog__title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.el-dialog__body {
+    padding: 28px;
+}
+
+/* ============================================
+   分页优化
+   ============================================ */
+.el-pagination {
+    padding: 20px 0;
+}
+
+.el-pagination .el-pager li {
+    border-radius: 8px;
+    margin: 0 4px;
+    transition: all 0.3s;
+}
+
+.el-pagination .el-pager li.is-active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* ============================================
+   加载动画
+   ============================================ */
+.el-loading-mask {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+}
+
+/* ============================================
+   空状态优化
+   ============================================ */
+.el-empty {
+    padding: 40px 0;
+}
+
+/* ============================================
+   描述列表优化
+   ============================================ */
+.el-descriptions {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.el-descriptions__header {
+    margin-bottom: 16px;
+}
+
+.el-descriptions__label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   折叠面板优化
+   ============================================ */
+.el-collapse {
+    border: none;
+}
+
+.el-collapse-item__header {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.el-collapse-item__header:hover {
+    background: rgba(102, 126, 234, 0.04);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.el-collapse-item__wrap {
+    border: none;
+    background: var(--bg-card);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+/* ============================================
+   进度条优化
+   ============================================ */
+.el-progress-bar__outer {
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+.el-progress-bar__inner {
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   消息提示优化
+   ============================================ */
+.el-message {
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: none;
+}
+
+/* ============================================
+   响应式设计
+   ============================================ */
+@media (max-width: 768px) {
+    .el-main {
+        padding: 16px;
+    }
+    
+    .el-header {
+        padding: 0 16px;
+        font-size: 18px;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 32px;
+    }
+}

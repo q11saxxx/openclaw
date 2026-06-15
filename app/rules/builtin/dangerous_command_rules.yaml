@@ -1,0 +1,8 @@
+# 规则描述：
+# - 检测潜在危险命令
+# - 正式阶段建议支持文件名、命令片段、上下文窗口与权重
+rules:
+  - id: dangerous-shell-exec
+    title: 检测危险 shell 执行
+    pattern: "rm -rf"
+    level: high

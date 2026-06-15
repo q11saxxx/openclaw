@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Skill Risk Platform - 审计流程架构图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .mermaid-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .info-section {
+            margin-top: 40px;
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .stage-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stage-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .stage-card h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        
+        .stage-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .stage-card ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .stage-card li {
+            color: #666;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .export-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ OpenClaw Skill Risk Platform</h1>
+            <p>多智能体协作的供应链风险检测平台 - 审计流程架构</p>
+        </div>
+        
+        <div class="content">
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    subgraph Input["📥 OpenClaw Skill 输入"]
+        A[本地目录]
+        B[ZIP压缩包]
+        C[远程Git仓库]
+    end
+    
+    subgraph Orchestrator["⚙️ Orchestrator 统一编排器"]
+        O[流程调度与状态管理]
+    end
+    
+    subgraph Parser["🔍 Parser Agent - Skill结构解析"]
+        P[解析manifest.yaml<br/>提取代码文件<br/>分析依赖关系]
+    end
+    
+    subgraph ParallelAudit["🔄 并行审计执行"]
+        direction TB
+        S1[静态安全Agent<br/>代码级安全审计]
+        S2[语义审计Agent<br/>提示词/指令语义审计]
+        S3[依赖分析Agent<br/>供应链安全分析]
+        S4[来源溯源Agent<br/>来源可信性验证]
+    end
+    
+    subgraph Scoring["📊 RiskModel & Scoring<br/>多维度风险评分聚合"]
+        SC[风险分数计算<br/>置信度评估<br/>证据合并]
+    end
+    
+    subgraph Decision["🎯 决策Agent<br/>风险等级综合判定"]
+        D[低风险 / 中风险<br/>高风险 / 严重风险]
+    end
+    
+    subgraph Report["📄 报告生成Agent<br/>多格式审计报告输出"]
+        R[HTML报告<br/>Markdown报告<br/>JSON数据]
+    end
+    
+    subgraph Output["📤 审计结果输出"]
+        OUT[JSON / Markdown / HTML]
+    end
+    
+    A --> O
+    B --> O
+    C --> O
+    O --> P
+    P --> S1
+    P --> S2
+    P --> S3
+    P --> S4
+    S1 --> SC
+    S2 --> SC
+    S3 --> SC
+    S4 --> SC
+    SC --> D
+    D --> R
+    R --> OUT
+    
+    style Input fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style Orchestrator fill:#fff3e0,stroke:#f57c00,stroke-width:3px
+    style Parser fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style ParallelAudit fill:#e8f5e9,stroke:#388e3c,stroke-width:3px
+    style Scoring fill:#fce4ec,stroke:#c2185b,stroke-width:3px
+    style Decision fill:#fff9c4,stroke:#fbc02d,stroke-width:3px
+    style Report fill:#e0f2f1,stroke:#00796b,stroke-width:3px
+    style Output fill:#fafafa,stroke:#616161,stroke-width:3px
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="export-btn" onclick="window.print()">🖨️ 打印/保存为PDF</button>
+                <button class="export-btn" onclick="exportAsImage()">📸 导出为PNG图片</button>
+            </div>
+            
+            <div class="info-section">
+                <h2>📋 流程详细说明</h2>
+                
+                <div class="stage-card">
+                    <h3>1️⃣ 📥 输入层</h3>
+                    <p>支持多种 Skill 包输入方式：</p>
+                    <ul>
+                        <li><strong>本地目录</strong>：直接扫描本地文件系统</li>
+                        <li><strong>ZIP压缩包</strong>：解压后进行分析</li>
+                        <li><strong>远程Git仓库</strong>：克隆远程仓库进行审计</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>2️⃣ ⚙️ 编排层 - Orchestrator</h3>
+                    <p>统一编排器负责整个审计流程的调度和状态管理：</p>
+                    <ul>
+                        <li>审计任务的调度和协调</li>
+                        <li>各阶段状态管理</li>
+                        <li>错误处理和重试机制</li>
+                        <li>异步任务队列管理</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>3️⃣ 🔍 解析层 - Parser Agent</h3>
+                    <p>Skill 结构解析，提取关键信息：</p>
+                    <ul>
+                        <li>解析 manifest.yaml 配置文件</li>
+                        <li>提取所有代码文件和资源</li>
+                        <li>分析依赖关系树</li>
+                        <li>构建审计上下文</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>4️⃣ 🔄 并行审计层 - 四大Agent协同</h3>
+                    <p>四个专业 Agent 并行执行审计任务：</p>
+                    <ul>
+                        <li><strong>静态安全Agent</strong>：文件权限检查、危险命令检测、敏感路径访问、可疑网络请求分析</li>
+                        <li><strong>语义审计Agent</strong>：Prompt注入攻击检测、指令意图分析、社会工程学风险识别</li>
+                        <li><strong>依赖分析Agent</strong>：依赖树构建、版本冲突检测、已知CVE漏洞匹配、供应链投毒风险评估</li>
+                        <li><strong>来源溯源Agent</strong>：Git仓库信誉度评估、数字签名验证、作者身份可信度分析</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>5️⃣ 📊 评分层 - RiskModel & Scoring</h3>
+                    <p>多维度风险评分聚合：</p>
+                    <ul>
+                        <li>综合各 Agent 的证据</li>
+                        <li>计算加权风险分数（0-100）</li>
+                        <li>评估置信度水平</li>
+                        <li>生成风险热力图</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>6️⃣ 🎯 决策层 - 决策Agent</h3>
+                    <p>根据评分结果判定风险等级：</p>
+                    <ul>
+                        <li>🟢 <strong>低风险</strong> (0-30)：可安全使用</li>
+                        <li>🟡 <strong>中风险</strong> (31-60)：需人工审查</li>
+                        <li>🟠 <strong>高风险</strong> (61-85)：建议隔离运行</li>
+                        <li>🔴 <strong>严重风险</strong> (86-100)：禁止使用</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>7️⃣ 📄 报告层 - 报告生成Agent</h3>
+                    <p>输出多格式审计报告：</p>
+                    <ul>
+                        <li><strong>HTML报告</strong>：可视化图表、交互式界面</li>
+                        <li><strong>Markdown报告</strong>：易于分享和版本控制</li>
+                        <li><strong>JSON数据</strong>：便于程序化处理和集成</li>
+                    </ul>
+                </div>
+                
+                <div class="stage-card">
+                    <h3>8️⃣ 📤 输出层</h3>
+                    <p>最终审计结果以标准化格式输出：</p>
+                    <ul>
+                        <li>API 接口返回</li>
+                        <li>文件导出</li>
+                        <li>数据库持久化</li>
+                        <li>前端可视化展示</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>OpenClaw Skill Risk Platform</strong> | 多智能体协作的供应链风险检测平台</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">生成时间: 2026-04-22 | 版本: v1.0</p>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化 Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+        
+        // 导出为图片功能
+        function exportAsImage() {
+            const mermaidDiv = document.querySelector('.mermaid');
+            const svg = mermaidDiv.querySelector('svg');
+            
+            if (!svg) {
+                alert('图表尚未加载完成，请稍后再试');
+                return;
+            }
+            
+            // 创建 Canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 设置 Canvas 尺寸
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width * 2; // 高分辨率
+                canvas.height = img.height * 2;
+                
+                // 白色背景
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 绘制图片
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // 下载
+                const link = document.createElement('a');
+                link.download = 'openclaw-audit-flowchart.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+        }
+    </script>
+</body>
+</html>

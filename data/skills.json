@@ -1,0 +1,1122 @@
+{
+  "items": [
+    {
+      "id": "656f34af80d543e4bd6bdaad8ad8a0af",
+      "name": "example-skill-1.zip",
+      "filename": "example1.zip",
+      "path": "./data/uploads/example1.zip",
+      "size": 10240,
+      "risk_level": "low",
+      "status": "uploaded",
+      "created_at": "2026-04-21T13:48:35.396541"
+    },
+    {
+      "id": "366f3f8aee074a05b8219fa29318882d",
+      "name": "example-skill-2.tar.gz",
+      "filename": "example2.tar.gz",
+      "path": "./data/uploads/example2.tar.gz",
+      "size": 20480,
+      "risk_level": "medium",
+      "status": "uploaded",
+      "created_at": "2026-04-21T13:48:35.396541"
+    },
+    {
+      "name": "test-skill-demo.zip",
+      "path": "data\\uploads\\785a71a52c03c0f93e5cf6141d91cba4587b2ecf_test-skill-demo.zip",
+      "filename": "test-skill-demo.zip",
+      "size": 1216,
+      "sha256": "4dd0c157970988aa71e23bf233015ffd04e25f07e13c330c08baac52b42c11fc",
+      "status": "uploaded",
+      "id": "499dcf42da6f42df9873d360cca35750",
+      "created_at": "2026-04-22T01:26:59.138715",
+      "quick_check": {
+        "timestamp": "2026-04-22T01:26:59.147659",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      }
+    },
+    {
+      "name": "test-skill-demo.zip",
+      "path": "data\\uploads\\91a13905a0b56b0b7739fe4c890774d01e6b1e8a_test-skill-demo.zip",
+      "filename": "test-skill-demo.zip",
+      "size": 1216,
+      "sha256": "4dd0c157970988aa71e23bf233015ffd04e25f07e13c330c08baac52b42c11fc",
+      "status": "uploaded",
+      "id": "ca6b55035d9d44afaf85a0425b32be8c",
+      "created_at": "2026-04-22T01:38:06.651639",
+      "quick_check": {
+        "timestamp": "2026-04-22T01:38:06.661667",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      }
+    },
+    {
+      "name": "test-skill-demo.zip",
+      "path": "data\\uploads\\864f6b71024c3eb2c82bce7ec26214cf08a5d174_test-skill-demo.zip",
+      "filename": "test-skill-demo.zip",
+      "size": 1216,
+      "sha256": "4dd0c157970988aa71e23bf233015ffd04e25f07e13c330c08baac52b42c11fc",
+      "status": "uploaded",
+      "id": "dbd349f711f1454ca24bc1d621e97db4",
+      "created_at": "2026-04-22T01:42:07.263626",
+      "quick_check": {
+        "timestamp": "2026-04-22T01:42:07.270364",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      }
+    },
+    {
+      "name": "SKILL.md",
+      "path": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+      "filename": "SKILL.md",
+      "size": 25305,
+      "sha256": "16473a50bac62056bd6d7b02962fab75e871fd0abce49941b3e4a44052c74d7b",
+      "status": "audited",
+      "id": "b000e5ca8b24452bbdac39766d06f913",
+      "created_at": "2026-05-09T08:49:00.523967",
+      "quick_check": {
+        "timestamp": "2026-05-09T08:49:00.534211",
+        "level": "critical",
+        "findings": [
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 188,
+              "target_path": "/root",
+              "level": "critical",
+              "reason": "根用户主目录",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 188,
+              "target_path": "/root/.ssh",
+              "level": "critical",
+              "reason": "根用户SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 319,
+              "target_path": "/etc/passwd",
+              "level": "critical",
+              "reason": "用户账户文件",
+              "content": "cat /etc/passwd | grep -v nologin",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 316,
+              "target_path": "/etc/ssh/sshd_config",
+              "level": "high",
+              "reason": "SSH配置",
+              "content": "cat /etc/ssh/sshd_config",
+              "type": "critical_config"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 183,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_rsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 184,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_dsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 185,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ecdsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 186,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ed25519",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 188,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e40fe0ae79d1167a40ac20c57b2a9197aedcd3bd_SKILL.md",
+              "line": 189,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/home/*/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "bypass",
+                  "matched_text": "bypass",
+                  "location": "Offset: 4347"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 22,
+            "sensitive_paths": 3,
+            "critical_configs": 1,
+            "private_files": 18,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      },
+      "last_audit": "2026-05-09T08:49:00.600783",
+      "last_audit_risk_level": "CRITICAL",
+      "last_audit_confidence": 0.77,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "name": "SKILL.md",
+      "path": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+      "filename": "SKILL.md",
+      "size": 25305,
+      "sha256": "16473a50bac62056bd6d7b02962fab75e871fd0abce49941b3e4a44052c74d7b",
+      "status": "uploaded",
+      "id": "d3266e28d34c4eeebcc1ffc77f66fbf6",
+      "created_at": "2026-05-09T13:08:31.657270",
+      "quick_check": {
+        "timestamp": "2026-05-09T13:08:31.659369",
+        "level": "critical",
+        "findings": [
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 188,
+              "target_path": "/root",
+              "level": "critical",
+              "reason": "根用户主目录",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 188,
+              "target_path": "/root/.ssh",
+              "level": "critical",
+              "reason": "根用户SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 319,
+              "target_path": "/etc/passwd",
+              "level": "critical",
+              "reason": "用户账户文件",
+              "content": "cat /etc/passwd | grep -v nologin",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 316,
+              "target_path": "/etc/ssh/sshd_config",
+              "level": "high",
+              "reason": "SSH配置",
+              "content": "cat /etc/ssh/sshd_config",
+              "type": "critical_config"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 183,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_rsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 184,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_dsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 185,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ecdsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 186,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ed25519",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 188,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\798794ef7bf237b9efb76270cd9fd0759f339c18_SKILL.md",
+              "line": 189,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/home/*/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "bypass",
+                  "matched_text": "bypass",
+                  "location": "Offset: 4347"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 22,
+            "sensitive_paths": 3,
+            "critical_configs": 1,
+            "private_files": 18,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      }
+    },
+    {
+      "name": "SKILL.md",
+      "path": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+      "filename": "SKILL.md",
+      "size": 25305,
+      "sha256": "16473a50bac62056bd6d7b02962fab75e871fd0abce49941b3e4a44052c74d7b",
+      "status": "audited",
+      "id": "ec03ee4f85854f5080e833eb158dc409",
+      "created_at": "2026-05-09T13:09:08.003755",
+      "quick_check": {
+        "timestamp": "2026-05-09T13:09:08.017572",
+        "level": "critical",
+        "findings": [
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 188,
+              "target_path": "/root",
+              "level": "critical",
+              "reason": "根用户主目录",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 188,
+              "target_path": "/root/.ssh",
+              "level": "critical",
+              "reason": "根用户SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 319,
+              "target_path": "/etc/passwd",
+              "level": "critical",
+              "reason": "用户账户文件",
+              "content": "cat /etc/passwd | grep -v nologin",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 316,
+              "target_path": "/etc/ssh/sshd_config",
+              "level": "high",
+              "reason": "SSH配置",
+              "content": "cat /etc/ssh/sshd_config",
+              "type": "critical_config"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 183,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_rsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 184,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_dsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 185,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ecdsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 186,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ed25519",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 188,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\abef5718f82857f73ed49e0d6477d5d11f952221_SKILL.md",
+              "line": 189,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/home/*/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "bypass",
+                  "matched_text": "bypass",
+                  "location": "Offset: 4347"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 22,
+            "sensitive_paths": 3,
+            "critical_configs": 1,
+            "private_files": 18,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      },
+      "last_audit": "2026-05-09T13:09:08.057960",
+      "last_audit_risk_level": "CRITICAL",
+      "last_audit_confidence": 0.77,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "name": "ai-preprocessing-test-skill.zip",
+      "path": "data\\uploads\\57b2730efc7e8d8c262bf0a856360391fe87baf2_ai-preprocessing-test-skill.zip",
+      "filename": "ai-preprocessing-test-skill.zip",
+      "size": 4246,
+      "sha256": "8577328566a5f9c8c200eaa4c6adc83e9d4f39c11fb76b64a17bb736a6874fe7",
+      "status": "audited",
+      "id": "4bd162c6c6bf4fdb984ec2d60a15e4b6",
+      "created_at": "2026-05-10T05:16:51.632429",
+      "quick_check": {
+        "timestamp": "2026-05-10T05:16:51.643982",
+        "level": "low",
+        "findings": [],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": false
+          }
+        }
+      },
+      "last_audit": "2026-05-10T05:16:51.733102",
+      "last_audit_risk_level": "MEDIUM",
+      "last_audit_confidence": 0.7,
+      "risk_level": "MEDIUM"
+    },
+    {
+      "name": "SKILL (1).md",
+      "path": "data\\uploads\\310c29fa702f35d6f0e3fc2ace88e325bcf0aa34_SKILL (1).md",
+      "filename": "SKILL (1).md",
+      "size": 10573,
+      "sha256": "ae23cb13945c18401e4194da1e3123886df49447cc0c3dd226ff99dafe017012",
+      "status": "audited",
+      "id": "9f4110bf74ae443c8bd1a8148fdb817c",
+      "created_at": "2026-05-12T08:44:53.893860",
+      "quick_check": {
+        "timestamp": "2026-05-12T08:44:53.899877",
+        "level": "high",
+        "findings": [
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "[A-Za-z0-9+/]{40,}=*",
+                  "matched_text": "/usr/libexec/ApplicationFirewall/socketfilterfw",
+                  "location": "Offset: 4074"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 0,
+            "sensitive_paths": 0,
+            "critical_configs": 0,
+            "private_files": 0,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      },
+      "last_audit": "2026-05-12T08:44:53.948824",
+      "last_audit_risk_level": "HIGH",
+      "last_audit_confidence": 0.85,
+      "risk_level": "HIGH"
+    },
+    {
+      "name": "SKILL (2).md",
+      "path": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+      "filename": "SKILL (2).md",
+      "size": 25305,
+      "sha256": "16473a50bac62056bd6d7b02962fab75e871fd0abce49941b3e4a44052c74d7b",
+      "status": "audited",
+      "id": "57e8b78c20ee4e3cab94eebada5fb57d",
+      "created_at": "2026-05-12T08:46:30.594883",
+      "quick_check": {
+        "timestamp": "2026-05-12T08:46:30.612949",
+        "level": "critical",
+        "findings": [
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 188,
+              "target_path": "/root",
+              "level": "critical",
+              "reason": "根用户主目录",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 188,
+              "target_path": "/root/.ssh",
+              "level": "critical",
+              "reason": "根用户SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 319,
+              "target_path": "/etc/passwd",
+              "level": "critical",
+              "reason": "用户账户文件",
+              "content": "cat /etc/passwd | grep -v nologin",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 316,
+              "target_path": "/etc/ssh/sshd_config",
+              "level": "high",
+              "reason": "SSH配置",
+              "content": "cat /etc/ssh/sshd_config",
+              "type": "critical_config"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 183,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_rsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 184,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_dsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 185,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ecdsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 186,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ed25519",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 188,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\763177de16a436cd1c597faecb69cf215d5a0ddd_SKILL (2).md",
+              "line": 189,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/home/*/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "bypass",
+                  "matched_text": "bypass",
+                  "location": "Offset: 4347"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 22,
+            "sensitive_paths": 3,
+            "critical_configs": 1,
+            "private_files": 18,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      },
+      "last_audit": "2026-05-12T08:46:30.660038",
+      "last_audit_risk_level": "CRITICAL",
+      "last_audit_confidence": 0.78,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "name": "SKILL (2).md",
+      "path": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+      "filename": "SKILL (2).md",
+      "size": 25305,
+      "sha256": "16473a50bac62056bd6d7b02962fab75e871fd0abce49941b3e4a44052c74d7b",
+      "status": "audited",
+      "id": "58562891fc6f4407bdceb50707075107",
+      "created_at": "2026-05-12T08:54:51.892249",
+      "quick_check": {
+        "timestamp": "2026-05-12T08:54:51.929483",
+        "level": "critical",
+        "findings": [
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 188,
+              "target_path": "/root",
+              "level": "critical",
+              "reason": "根用户主目录",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 188,
+              "target_path": "/root/.ssh",
+              "level": "critical",
+              "reason": "根用户SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 319,
+              "target_path": "/etc/passwd",
+              "level": "critical",
+              "reason": "用户账户文件",
+              "content": "cat /etc/passwd | grep -v nologin",
+              "type": "sensitive_path"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 316,
+              "target_path": "/etc/ssh/sshd_config",
+              "level": "high",
+              "reason": "SSH配置",
+              "content": "cat /etc/ssh/sshd_config",
+              "type": "critical_config"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 183,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_rsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 184,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_dsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 185,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ecdsa",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 186,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "~/.ssh/id_ed25519",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 188,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/root/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "file_permission",
+            "evidence": {
+              "file": "data\\uploads\\e7abea107f8f5c001cdd125a2ab0f2847a4c2622_SKILL (2).md",
+              "line": 189,
+              "target_file": ".ssh",
+              "level": "high",
+              "reason": "SSH密钥",
+              "content": "/home/*/.ssh/",
+              "type": "private_file"
+            }
+          },
+          {
+            "agent": "prompt_injection",
+            "evidence": {
+              "agent": "semantic_audit",
+              "type": "static_pattern_match",
+              "risk_level": "high",
+              "confidence": 0.8,
+              "evidence": [
+                {
+                  "pattern": "bypass",
+                  "matched_text": "bypass",
+                  "location": "Offset: 4347"
+                }
+              ],
+              "reason": "匹配到 1 处已知的恶意提示词模式",
+              "file": "SKILL.md"
+            }
+          }
+        ],
+        "summary": {
+          "script": {
+            "total_findings": 0,
+            "dangerous_commands": 0,
+            "download_execute_chains": 0,
+            "persistence_behaviors": 0,
+            "network_operations": 0,
+            "obfuscation_code": 0
+          },
+          "file_permission": {
+            "total_findings": 22,
+            "sensitive_paths": 3,
+            "critical_configs": 1,
+            "private_files": 18,
+            "log_operations": 0,
+            "permission_changes": 0
+          },
+          "prompt_injection": {
+            "found": true
+          }
+        }
+      },
+      "last_audit": "2026-05-12T08:54:52.026350",
+      "last_audit_risk_level": "CRITICAL",
+      "last_audit_confidence": 0.78,
+      "risk_level": "CRITICAL"
+    }
+  ]
+}

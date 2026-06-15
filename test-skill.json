@@ -1,0 +1,7 @@
+{
+  "name": "test-skill-demo",
+  "version": "1.0.0",
+  "description": "A test skill for demonstration",
+  "author": "test-user",
+  "entrypoint": "main.py"
+}

@@ -1,0 +1,5 @@
+rules:
+  - id: suspicious-network
+    title: 检测可疑外联
+    pattern: "curl http://"
+    level: medium

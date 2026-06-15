@@ -1,0 +1,5 @@
+rules:
+  - id: prompt-risk-ignore-previous
+    title: 忽略前置指令类风险
+    pattern: "忽略之前的所有指令"
+    level: medium

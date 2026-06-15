@@ -1,0 +1,1028 @@
+{
+  "metadata": {
+    "skill_name": "test-skill-demo",
+    "version": "1.0.0",
+    "skill_path": "test-skill-demo",
+    "scan_time": "2026-05-10T17:59:50.035069",
+    "engine_version": "OpenClaw-Risk-Platform-V1",
+    "ai_preprocessing": true
+  },
+  "summary": {
+    "risk_level": "CRITICAL",
+    "recommendation": "REJECT",
+    "confidence": 0.82,
+    "finding_count": 8,
+    "severity_distribution": {
+      "critical": 2,
+      "high": 1,
+      "medium": 4,
+      "low": 1
+    },
+    "overall_summary": "检测到 2 项严重安全威胁，已直接拦截。"
+  },
+  "findings": [
+    {
+      "agent": "static_security",
+      "type": "static script analysis",
+      "risk_level": "critical",
+      "reason": "检测到 66 处 script_analysis 风险点",
+      "evidence": [
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 766,
+          "pattern": "rm -rf /",
+          "severity": "critical",
+          "content": "os.system(\"rm -rf /\")  # 危险：删除根目录",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 788,
+          "pattern": "eval",
+          "severity": "critical",
+          "content": "eval(\"import os; os.system('whoami')\")  # 危险：动态代码执行",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 789,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(\"print('Hello from exec')\")  # 危险：动态代码执行",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 790,
+          "pattern": "rm -rf /",
+          "severity": "critical",
+          "content": "subprocess.run([\"bash\", \"-c\", \"rm -rf /tmp/*\"])  # 危险：子进程执行",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 824,
+          "pattern": "rm -rf /",
+          "severity": "critical",
+          "content": "user_input = \"; rm -rf /\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1021,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1029,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1045,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"filler_variable_{i:03d} = 'value_{i:03d}'\")",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1049,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1056,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1064,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1077,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1091,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1099,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1107,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1120,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1133,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1146,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1159,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1168,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1179,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1193,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1201,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1213,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1223,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1240,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1250,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1267,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1278,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1286,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1294,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1303,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1313,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1335,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1353,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1370,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1391,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1415,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1440,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1459,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1480,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1494,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1505,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1523,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1539,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1558,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1576,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1592,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1614,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1629,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 1644,
+          "pattern": "exec",
+          "severity": "critical",
+          "content": "exec(f\"\"\"",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\main.py",
+          "line": 10,
+          "pattern": "Shell=True",
+          "severity": "high",
+          "content": "result = subprocess.run(cmd, shell=True, capture_output=True, text=True)",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 766,
+          "pattern": "system",
+          "severity": "high",
+          "content": "os.system(\"rm -rf /\")  # 危险：删除根目录",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 766,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "os.system(\"rm -rf /\")  # 危险：删除根目录",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 782,
+          "pattern": "system",
+          "severity": "high",
+          "content": "os.system(\"/bin/sh\")",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 782,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "os.system(\"/bin/sh\")",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 788,
+          "pattern": "system",
+          "severity": "high",
+          "content": "eval(\"import os; os.system('whoami')\")  # 危险：动态代码执行",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 788,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "eval(\"import os; os.system('whoami')\")  # 危险：动态代码执行",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 826,
+          "pattern": "system",
+          "severity": "high",
+          "content": "os.system(command)",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 826,
+          "pattern": "os.system",
+          "severity": "high",
+          "content": "os.system(command)",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\main.py",
+          "line": 5,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "import subprocess",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\main.py",
+          "line": 10,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "result = subprocess.run(cmd, shell=True, capture_output=True, text=True)",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 14,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "import subprocess",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 113,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "import subprocess",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 176,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "import subprocess",
+          "type": "dangerous_command"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 790,
+          "pattern": "subprocess",
+          "severity": "medium",
+          "content": "subprocess.run([\"bash\", \"-c\", \"rm -rf /tmp/*\"])  # 危险：子进程执行",
+          "type": "dangerous_command"
+        }
+      ],
+      "recommendation": "建议重新评估此代码段的安全性，遵循最小权限原则和安全编码规范。"
+    },
+    {
+      "agent": "static_security",
+      "type": "file permission and sensitive path analysis",
+      "risk_level": "critical",
+      "reason": "检测到 23 处 permission_analysis 风险点",
+      "evidence": [
+        {
+          "file": "test-skill-demo\\main.py",
+          "line": 16,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "\"/etc/passwd\",",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 767,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "os.remove(\"/etc/passwd\")  # 危险：删除系统文件",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 768,
+          "target_path": "/etc/shadow",
+          "level": "critical",
+          "reason": "密码哈希文件",
+          "content": "os.chmod(\"/etc/shadow\", 0o777)  # 危险：修改权限",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 769,
+          "target_path": "/etc/shadow",
+          "level": "critical",
+          "reason": "密码哈希文件",
+          "content": "os.chown(\"/etc/shadow\", 0, 0)  # 危险：修改所有者",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 869,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "with open(\"/etc/passwd\", \"r\") as f:",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 871,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "logging.info(\"Successfully read /etc/passwd\")",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 874,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "logging.error(\"File not found: /etc/passwd\")",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 878,
+          "target_path": "/etc/passwd",
+          "level": "critical",
+          "reason": "用户账户文件",
+          "content": "logging.error(\"Permission denied: /etc/passwd\")",
+          "type": "sensitive_path"
+        },
+        {
+          "file": "test-skill-demo\\main.py",
+          "line": 17,
+          "target_file": ".ssh",
+          "level": "high",
+          "reason": "SSH密钥",
+          "content": "\"~/.ssh/id_rsa\",",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 878,
+          "operation": "rm",
+          "target_path": "/etc/passwd",
+          "level": "high",
+          "operation_type": "delete",
+          "content": "logging.error(\"Permission denied: /etc/passwd\")",
+          "type": "permission_change"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 289,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config = config or {}",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 429,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config_file = config_file or CONFIG_FILE",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 430,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config = {}",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 436,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "if os.path.exists(self.config_file):",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 437,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "with open(self.config_file, 'r') as f:",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 438,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config = json.load(f)",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 441,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config = {}",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 446,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "with open(self.config_file, 'w') as f:",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 447,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "json.dump(self.config, f, indent=2)",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 454,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "return self.config.get(key, default)",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 458,
+          "target_file": ".config",
+          "level": "medium",
+          "reason": "应用配置",
+          "content": "self.config[key] = value",
+          "type": "private_file"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 768,
+          "operation": "chmod",
+          "target_path": "/etc/shadow",
+          "level": "medium",
+          "operation_type": "permission",
+          "content": "os.chmod(\"/etc/shadow\", 0o777)  # 危险：修改权限",
+          "type": "permission_change"
+        },
+        {
+          "file": "test-skill-demo\\large-code\\main.py",
+          "line": 769,
+          "operation": "chown",
+          "target_path": "/etc/shadow",
+          "level": "medium",
+          "operation_type": "ownership",
+          "content": "os.chown(\"/etc/shadow\", 0, 0)  # 危险：修改所有者",
+          "type": "permission_change"
+        }
+      ],
+      "recommendation": "建议审查权限声明，确保符合最小权限原则并向用户透明披露。"
+    },
+    {
+      "agent": "provenance",
+      "type": "missing_license",
+      "risk_level": "low",
+      "reason": "未检测到开源许可证声明，可能存在合规性隐患。",
+      "evidence": {
+        "type": "missing_license",
+        "level": "low",
+        "message": "未检测到开源许可证声明，可能存在合规性隐患。"
+      },
+      "recommendation": "请在项目根目录添加 LICENSE 文件，并在 manifest.yaml 中声明许可证类型（如 MIT、Apache-2.0）。这有助于明确使用权限和法律合规性。"
+    },
+    {
+      "agent": "provenance",
+      "type": "suspicious_source",
+      "risk_level": "medium",
+      "reason": "供应链威胁: http://example.com/api - 非HTTPS source",
+      "evidence": {
+        "file": "test-skill-demo\\main.py",
+        "item": "http://example.com/api",
+        "type": "suspicious_source",
+        "level": "medium",
+        "reason": "非HTTPS source"
+      },
+      "recommendation": "建议仔细审查此供应链风险项，确保所有依赖都来自可信源。参考 OpenClaw 供应链安全最佳实践文档进行修复。"
+    },
+    {
+      "agent": "provenance",
+      "type": "suspicious_source",
+      "risk_level": "medium",
+      "reason": "供应链威胁: http://internal-server.local/data - 非HTTPS source",
+      "evidence": {
+        "file": "test-skill-demo\\main.py",
+        "item": "http://internal-server.local/data",
+        "type": "suspicious_source",
+        "level": "medium",
+        "reason": "非HTTPS source"
+      },
+      "recommendation": "建议仔细审查此供应链风险项，确保所有依赖都来自可信源。参考 OpenClaw 供应链安全最佳实践文档进行修复。"
+    },
+    {
+      "agent": "provenance",
+      "type": "suspicious_source",
+      "risk_level": "medium",
+      "reason": "供应链威胁: http://localhost:8000/callback - 非HTTPS source",
+      "evidence": {
+        "file": "test-skill-demo\\large-code\\main.py",
+        "item": "http://localhost:8000/callback",
+        "type": "suspicious_source",
+        "level": "medium",
+        "reason": "非HTTPS source"
+      },
+      "recommendation": "建议仔细审查此供应链风险项，确保所有依赖都来自可信源。参考 OpenClaw 供应链安全最佳实践文档进行修复。"
+    },
+    {
+      "agent": "provenance",
+      "type": "suspicious_source",
+      "risk_level": "high",
+      "reason": "供应链威胁: http://localhost:8000/callback - 本地源",
+      "evidence": {
+        "file": "test-skill-demo\\large-code\\main.py",
+        "item": "http://localhost:8000/callback",
+        "type": "suspicious_source",
+        "level": "high",
+        "reason": "本地源"
+      },
+      "recommendation": "建议仔细审查此供应链风险项，确保所有依赖都来自可信源。参考 OpenClaw 供应链安全最佳实践文档进行修复。"
+    },
+    {
+      "agent": "provenance",
+      "type": "suspicious_package",
+      "risk_level": "medium",
+      "reason": "供应链威胁: None - 可能的包名相似度攻击",
+      "evidence": {
+        "file": "test-skill-demo\\large-code\\main.py",
+        "pattern": "requests.*s",
+        "type": "suspicious_package",
+        "level": "medium",
+        "reason": "可能的包名相似度攻击"
+      },
+      "recommendation": "建议仔细审查此供应链风险项，确保所有依赖都来自可信源。参考 OpenClaw 供应链安全最佳实践文档进行修复。"
+    }
+  ],
+  "preprocessed": {
+    "files_analyzed": 2,
+    "files_preprocessed": 1,
+    "preprocessed_files": [
+      {
+        "file_path": "test-skill-demo\\large-code\\main.py",
+        "original_lines": 1726,
+        "extracted_lines": 16,
+        "extraction_ratio": 0.009269988412514484,
+        "key_locations": [
+          {
+            "line_number": 10,
+            "context_type": "import",
+            "content": "import os"
+          },
+          {
+            "line_number": 11,
+            "context_type": "import",
+            "content": "import sys"
+          },
+          {
+            "line_number": 12,
+            "context_type": "import",
+            "content": "import json"
+          },
+          {
+            "line_number": 13,
+            "context_type": "import",
+            "content": "import requests"
+          },
+          {
+            "line_number": 14,
+            "context_type": "import",
+            "content": "import subprocess"
+          },
+          {
+            "line_number": 15,
+            "context_type": "import",
+            "content": "import tempfile"
+          },
+          {
+            "line_number": 16,
+            "context_type": "import",
+            "content": "import shutil"
+          },
+          {
+            "line_number": 17,
+            "context_type": "import",
+            "content": "import logging"
+          },
+          {
+            "line_number": 18,
+            "context_type": "import",
+            "content": "import threading"
+          },
+          {
+            "line_number": 19,
+            "context_type": "import",
+            "content": "import time"
+          }
+        ],
+        "preprocessed_content": "# ... (lines 1 - 6 omitted) ...\n# L7: # ============================================================================\n# L8: # 导入部分 - 这些应该被预处理提取\n# L9: # ============================================================================\n# L10: import os\n# L11: import sys\n# L12: import json\n# L13: import requests\n# L14: import subprocess\n# L15: import tempfile\n# L16: import shutil\n# L17: import logging\n# L18: import threading\n# L19: import time\n# L20: import re\n# L21: import hashlib\n# L22: import base64"
+      }
+    ],
+    "statistics": {
+      "total_original_lines": 1726,
+      "total_extracted_lines": 16,
+      "average_compression_ratio": 0.009269988412514484
+    },
+    "ai_preprocessing_enabled": false
+  },
+  "parsed_facts": {
+    "structure": {
+      "path": "test-skill-demo",
+      "skill_md_found": true,
+      "manifest_files": [
+        "manifest.yaml",
+        "SKILL.md"
+      ],
+      "entry_points": [
+        {
+          "path": "main.py",
+          "type": "root"
+        },
+        {
+          "path": "large-code/main.py",
+          "type": "nested"
+        }
+      ],
+      "files": [
+        {
+          "path": "main.py",
+          "name": "main.py",
+          "suffix": ".py",
+          "size": 1077
+        },
+        {
+          "path": "manifest.yaml",
+          "name": "manifest.yaml",
+          "suffix": ".yaml",
+          "size": 193
+        },
+        {
+          "path": "SKILL.md",
+          "name": "SKILL.md",
+          "suffix": ".md",
+          "size": 541
+        },
+        {
+          "path": "large-code/main.py",
+          "name": "main.py",
+          "suffix": ".py",
+          "size": 48539
+        }
+      ],
+      "structure": {
+        "total_files": 4,
+        "total_dirs": 1,
+        "subdirectories": [
+          "large-code"
+        ],
+        "file_types": {
+          ".py": 2,
+          ".yaml": 1,
+          ".md": 1
+        },
+        "manifest_files": [
+          "manifest.yaml",
+          "SKILL.md"
+        ]
+      },
+      "errors": []
+    },
+    "manifest": {
+      "name": "test-skill-demo",
+      "version": "1.0.0",
+      "description": "A test skill for demonstration purposes",
+      "author": "test-user",
+      "license": "",
+      "compatible_versions": [],
+      "dependencies": [],
+      "tags": [],
+      "custom_fields": {},
+      "path": "test-skill-demo",
+      "manifest_files": [
+        "manifest.yaml"
+      ],
+      "frontmatter_found": false,
+      "manifest_source": "manifest.yaml",
+      "parse_errors": [],
+      "is_valid": true
+    },
+    "validation": {
+      "warnings": [],
+      "errors": [],
+      "checks": {
+        "skill_md_found": true,
+        "manifest_found": true,
+        "name_available": true,
+        "version_valid": true,
+        "file_count_reasonable": true
+      }
+    }
+  },
+  "report_id": "audit_test_skill_demo_20260510_175950"
+}
